@@ -5,7 +5,9 @@ import {
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    toggleVideoLike,
+    toggleVideoDislike // We will create this controller next
 } from "../controllers/video.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -13,36 +15,31 @@ import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
 
 // --- Public Routes ---
-// Anyone can perform these actions, even if not logged in.
+// Anyone, logged in or not, can access these.
 router.route("/").get(getAllVideos);
 router.route("/:videoId").get(getVideoById);
 
 
 // --- Protected Routes ---
-// The verifyJWT middleware will be applied to all routes BELOW this line.
-// A user MUST be logged in to publish, update, or delete videos.
+// From this line onwards, a user MUST be logged in.
+// The `verifyJWT` middleware acts as a gatekeeper.
 router.use(verifyJWT);
 
 router.route("/").post(
     upload.fields([
-        {
-            name: "videoFile",
-            maxCount: 1,
-        },
-        {
-            name: "thumbnail",
-            maxCount: 1,
-        },
+        { name: "videoFile", maxCount: 1 },
+        { name: "thumbnail", maxCount: 1 },
     ]),
     publishAVideo
 );
 
-router
-    .route("/:videoId")
+router.route("/:videoId")
     .delete(deleteVideo)
     .patch(upload.single("thumbnail"), updateVideo);
 
 router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
+router.route("/toggle/like/:videoId").patch(toggleVideoLike);
+router.route("/toggle/dislike/:videoId").patch(toggleVideoDislike);
 
 
 export default router;

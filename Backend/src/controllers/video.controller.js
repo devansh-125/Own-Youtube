@@ -300,11 +300,89 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     );    
 });
 
+
+const toggleVideoLike = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+    const userId = req.user._id;
+
+    if (!videoId )  {
+        throw new ApiError(400, "Invalid videoId");
+    }
+
+    const video = await Video.findById(videoId);
+
+    if (!video) {
+        throw new ApiError(404, "Video not found");
+    }
+
+    // --- Main Toggle Logic ---
+
+    // First, remove the user from the dislikes array if they are in it
+    video.dislikes.pull(userId);
+
+    // Now, check if the user has already liked the video
+    const isLiked = video.likes.includes(userId);
+
+    if (isLiked) {
+        // User has already liked it, so we remove the like
+        video.likes.pull(userId);
+    } else {
+        // User has not liked it, so we add the like
+        video.likes.push(userId);
+    }
+
+    // Save the changes to the database
+    await video.save({ validateBeforeSave: false });
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, { isLiked: !isLiked }, "Like status toggled successfully"));
+});
+
+const toggleVideoDislike = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+    const userId = req.user._id;
+
+    if (!videoId )  {
+        throw new ApiError(400, "Invalid videoId");
+    }
+
+    const video = await Video.findById(videoId);
+
+    if (!video) {
+        throw new ApiError(404, "Video not found");
+    }
+    // --- Main Toggle Logic ---
+
+    // First, remove the user from the likes array if they are in it
+    video.likes.pull(userId);
+
+    // Now, check if the user has already disliked the video
+    const isDisliked = video.dislikes.includes(userId);
+    if (isDisliked) {
+        video.dislikes.pull(userId);
+    }
+    else {
+        video.dislikes.push(userId);
+    }
+
+    // Save the changes to the database
+    await video.save({ validateBeforeSave: false });
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, { isDisliked: !isDisliked }, "Dislike status toggled successfully"));
+
+});
+
+
 export {
     getAllVideos,
     publishAVideo,
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    toggleVideoLike,
+    toggleVideoDislike
 }
