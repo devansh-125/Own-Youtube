@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import './VideoDetail.css'; // Styling ke liye CSS file import karenge
+import API from '../services/api.js';
+import './VideoDetail.css';
+import LikeButton from '../components/social/LikeButton.jsx';
 
 function VideoDetail() {
-  // URL se videoId nikalne ke liye (e.g., /video/12345 -> videoId = "12345")
-  const { videoId } = useParams(); 
-  
+  const { videoId } = useParams();
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Jab bhi videoId badlega, yeh function chalega
     if (videoId) {
       const fetchVideoDetails = async () => {
         try {
           setLoading(true);
-          // Backend API ko call karke specific video ka data maangenge
-          const response = await axios.get(`http://localhost:8000/api/v1/videos/${videoId}`);
-          
-          // Aapka `getVideoById` controller ek array return karta hai, isliye hum pehla element lenge
-          setVideo(response.data.data[0]); 
+          const response = await API.get(`/videos/${videoId}`);
+          const videoDataArray = response.data.data;
+
+          if (videoDataArray && videoDataArray.length > 0) {
+            setVideo(videoDataArray[0]);
+          } else {
+            throw new Error("Video not found");
+          }
           setError(null);
         } catch (err) {
-          setError("Failed to fetch video details. Please check the video ID and server.");
+          setError("Failed to fetch video details.");
           console.error("API call failed:", err);
         } finally {
           setLoading(false);
@@ -34,52 +35,57 @@ function VideoDetail() {
     }
   }, [videoId]);
 
-  // --- Loading aur Error states ko handle karna ---
-  if (loading) {
-    return <div className='status-message'>Loading...</div>;
-  }
+  if (loading) return <div className='status-message'>Loading...</div>;
+  if (error) return <div className='status-message error'>{error}</div>;
+  if (!video) return <div className='status-message'>Video not found.</div>;
 
-  if (error) {
-    return <div className='status-message error'>{error}</div>;
-  }
+  const uploadDate = new Date(video.createdAt).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  });
 
-  if (!video) {
-    return <div className='status-message'>Video not found.</div>;
-  }
-
-  // --- Jab data aa jayega toh yeh render hoga ---
   return (
-    <div className='video-detail-container'>
-      <div className='video-player-wrapper'>
-        <video
-          className='video-player'
-          src={video.videoFile} // Cloudinary se video ka URL
-          controls
-          autoPlay
-        >
-          Your browser does not support the video tag.
-        </video>
-      </div>
-
-      <h1 className='video-title-detail'>{video.title}</h1>
-
-      <div className='channel-info-bar'>
-        <div className='channel-details'>
-          <img 
-              src={video.owner?.avatar} 
-              alt={video.owner?.username} 
-              className='channel-avatar-detail'
-          />
-          <h3 className='channel-name-detail'>{video.owner?.username}</h3>
+    <div className='video-detail-page'>
+      <div className='primary-column'>
+        <div className='video-player-wrapper'>
+          <video className='video-player' src={video.videoFile} controls autoPlay />
         </div>
-        {/* Yahan hum subscribe button aur like/dislike buttons baad mein add kar sakte hain */}
+
+        <div className='video-info-container'>
+          <h1 className='video-title-detail'>{video.title}</h1>
+          <div className='video-metadata-actions'>
+            <div className='video-stats'>
+                <span>{video.views} views</span>
+                <span>•</span>
+                <span>{uploadDate}</span>
+            </div>
+            <div className='action-buttons'>
+                <LikeButton video={video} /> {/* 2. Use the component here */}
+                <button className='action-btn-placeholder'>🔗 Share</button>
+            </div>
+          </div>
+        </div>
+        
+        <hr className='separator' />
+
+        <div className='channel-info-bar'>
+          <div className='channel-details'>
+            <img src={video.owner?.avatar} alt={video.owner?.username} className='channel-avatar-detail'/>
+            <div className='channel-text'>
+              <h3 className='channel-name-detail'>{video.owner?.username}</h3>
+            </div>
+          </div>
+          <button className='subscribe-btn'>Subscribe</button>
+        </div>
+
+        <div className='video-description-box'>
+          <p>{video.discription}</p>
+        </div>
       </div>
 
-      <div className='video-description-box'>
-        <p>{video.discription}</p> {/* Aapki spelling use ki hai */}
+      <div className='secondary-column'>
+        <h2 style={{margin: 0}}>Up Next</h2>
+        {/* Recommended videos will go here */}
       </div>
-
-      {/* Yahan hum comments section baad mein add karenge */}
     </div>
   );
 }

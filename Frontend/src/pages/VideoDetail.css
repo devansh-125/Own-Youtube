@@ -1,14 +1,24 @@
-.video-detail-container {
+.video-detail-page {
+    display: flex;
+    gap: 24px;
     padding: 24px;
-    max-width: 1280px;
+    max-width: 1700px;
     margin: 0 auto;
-    color: white;
+}
+
+.primary-column {
+    flex: 2;
+    min-width: 0;
+}
+
+.secondary-column {
+    flex: 1;
 }
 
 .video-player-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    padding-bottom: 56.25%;
     background-color: #000;
     margin-bottom: 1rem;
 }
@@ -22,10 +32,48 @@
     border-radius: 12px;
 }
 
+.video-info-container {
+    margin-bottom: 1rem;
+}
+
 .video-title-detail {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
+}
+
+.video-metadata-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.video-stats {
+    display: flex;
+    gap: 8px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn-placeholder {
+    background-color: #272727;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.separator {
+    border: none;
+    height: 1px;
+    background-color: #3f3f3f;
+    margin: 1.5rem 0;
 }
 
 .channel-info-bar {
@@ -52,15 +100,17 @@
     font-weight: 500;
 }
 
-.video-description-box {
-    background-color: #272727;
-    padding: 1rem;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    line-height: 1.5;
+.subscribe-btn {
+    background-color: #f1f1f1;
+    color: #0f0f0f;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
-/* Loading aur Error messages ke liye styles */
 .status-message {
     padding: 2rem;
     color: white;
@@ -71,4 +121,13 @@
 
 .status-message.error {
     color: #ff4d4d;
+}
+
+.video-description-box {
+    background-color: #272727;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
 }

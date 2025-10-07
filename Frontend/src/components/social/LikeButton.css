@@ -1,0 +1,33 @@
+.like-dislike-container {
+    display: flex;
+    gap: 8px;
+}
+
+.like-btn, .dislike-btn {
+    background-color: #272727;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    outline: none; /* Removes the click outline */
+    
+    /* --- ANIMATION & SHADOW --- */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.like-btn:hover, .dislike-btn:hover {
+    background-color: #3f3f3f;
+}
+
+/* This style applies ONLY while the mouse button is held down */
+.like-btn:active, .dislike-btn:active {
+    transform: scale(0.95); /* Shrinks the button for a "press" effect */
+}
+
+.like-btn.active, .dislike-btn.active {
+    background-color: #3ea6ff;
+    color: white;
+}

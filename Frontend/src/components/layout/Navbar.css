@@ -82,3 +82,29 @@
 .nav-button:hover {
     background-color: #3d3d3d;
 }
+
+.search-input {
+    /* ... existing styles ... */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Add transition */
+}
+
+/* This style applies when the input is clicked/focused */
+.search-input:focus {
+    outline: none;
+    border-color: #3ea6ff;
+    box-shadow: 0 0 10px rgba(62, 166, 255, 0.5); /* Add a glow effect */
+}
+
+.nav-button {
+    /* ... existing styles ... */
+    transition: background-color 0.2s, transform 0.1s; /* Make transition smoother */
+}
+
+.nav-button:hover {
+    background-color: #3d3d3d;
+}
+
+/* This makes the button feel like it's being pressed */
+.nav-button:active {
+    transform: scale(0.96);
+}

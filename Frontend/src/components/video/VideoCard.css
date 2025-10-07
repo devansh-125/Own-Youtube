@@ -70,3 +70,25 @@
     background-color: #222; /* Placeholder color */
     margin-bottom: 0.75rem;
 }
+
+.video-card {
+    display: block;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #181818; /* Add a base color */
+    
+    /* --- ANIMATION & SHADOW --- */
+    border: 1px solid #2d2d2d;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.video-card:hover {
+    transform: scale(1.03); /* Grow slightly on hover */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+}

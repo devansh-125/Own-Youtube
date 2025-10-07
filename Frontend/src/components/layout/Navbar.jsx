@@ -1,18 +1,52 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 import './Navbar.css';
 
 function Navbar() {
   const navigate = useNavigate();
-  
-  // This is a placeholder. Later, this will come from your authentication context.
-  const authStatus = false; 
+  const { isLoggedIn, authUser, logout } = useAuth();
 
-  const navItems = [
-    { name: 'Home', slug: "/", active: true },
-    { name: "Login", slug: "/login", active: !authStatus },
-    { name: "Signup", slug: "/signup", active: !authStatus },
-  ];
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  // 1. Create an empty variable to hold our links
+  let userLinks;
+
+  // 2. Use a standard if/else block to determine which links to show
+  if (isLoggedIn && authUser) {
+    // If the user IS logged in, prepare the Logout and Avatar links
+    userLinks = (
+      <>
+        <li>
+          <button onClick={handleLogout} className='nav-button'>Logout</button>
+        </li>
+        <li>
+          <Link to={`/profile`}>
+            <img 
+              src={authUser.avatar} 
+              alt={authUser.username} 
+              className='nav-avatar' 
+            />
+          </Link>
+        </li>
+      </>
+    );
+  } else {
+    // If the user is NOT logged in, prepare the Login and Signup links
+    userLinks = (
+      <>
+        <li>
+          <button onClick={() => navigate('/login')} className='nav-button'>Login</button>
+        </li>
+        <li>
+          <button onClick={() => navigate('/signup')} className='nav-button'>Signup</button>
+        </li>
+      </>
+    );
+  }
 
   return (
     <header className='navbar'>
@@ -34,26 +68,11 @@ function Navbar() {
         </div>
 
         <ul className='nav-links'>
-          {navItems.map((item) => 
-            item.active ? (
-              <li key={item.name}>
-                <button
-                  onClick={() => navigate(item.slug)}
-                  className='nav-button'
-                >
-                  {item.name}
-                </button>
-              </li>
-            ) : null
-          )}
-
-          {authStatus && (
-            <li>
-              <button className='nav-button'>
-                Logout
-              </button>
-            </li>
-          )}
+          <li>
+            <button onClick={() => navigate('/')} className='nav-button'>Home</button>
+          </li>
+          {/* 3. Render the variable that now holds the correct links */}
+          {userLinks}
         </ul>
       </nav>
     </header>
