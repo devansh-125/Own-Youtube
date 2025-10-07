@@ -1,0 +1,11 @@
+.home-container {
+    padding: 1.5rem;
+    background-color: #0f0f0f; /* YouTube's dark background color */
+    color: white;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
