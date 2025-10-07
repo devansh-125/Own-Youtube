@@ -4,37 +4,29 @@
     margin: 0 auto;
     padding: 2rem;
 }
-
 .separator {
     border: none;
     height: 1px;
     background-color: #3f3f3f;
     margin: 2rem 0;
 }
-
 .profile-videos-grid {
     padding-top: 1rem;
 }
-
 .profile-videos-grid h2 {
     margin-top: 0;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
 }
-
-/* This reuses the same video grid style from your homepage */
 .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
 }
-
 .status-message {
     padding: 2rem;
     text-align: center;
-    font-size: 1.2rem;
 }
-
 .status-message.error {
     color: #ff4d4d;
 }

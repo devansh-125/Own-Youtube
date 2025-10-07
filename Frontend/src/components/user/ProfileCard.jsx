@@ -1,11 +1,8 @@
 import React from 'react';
-import './ProfileCard.css'; // Make sure this path is correct
+import './ProfileCard.css'; // Make sure this import is here
 
-function ProfileCard({ channel }) { // It now accepts a 'channel' prop
-    // If there's no channel data, don't render anything
-    if (!channel) {
-        return null;
-    }
+function ProfileCard({ channel }) {
+    if (!channel) return null;
 
     return (
         <div className='profile-header'>
@@ -17,7 +14,6 @@ function ProfileCard({ channel }) { // It now accepts a 'channel' prop
                     <p>@{channel.username}</p>
                     <p>{channel.subscribersCount} Subscribers • {channel.videosCount} Videos</p>
                 </div>
-                {/* Subscribe button would go here */}
             </div>
         </div>
     );

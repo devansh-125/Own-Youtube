@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
-import API from '../services/api.js'; // 1. Import your API client
-import { useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import API from '../services/api.js';
 
 const AuthContext = createContext();
 
@@ -11,11 +10,9 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
     const [authUser, setAuthUser] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [loading, setLoading] = useState(true); // Add a loading state
 
-    // 2. Add this useEffect hook
     useEffect(() => {
-        // This function runs when the app first loads
+        // This runs once when the app loads to check if a user is already logged in
         API.get('/users/current-user')
             .then(response => {
                 if (response.data.data) {
@@ -24,32 +21,25 @@ export const AuthProvider = ({ children }) => {
                 }
             })
             .catch(error => {
-                // If this fails, it just means the user is not logged in
-                console.log("Auth check failed:", error);
-            })
-            .finally(() => {
-                setLoading(false); // Stop loading once the check is complete
+                // This error is expected if no one is logged in.
+                console.log("No active session found.");
+                setAuthUser(null);
+                setIsLoggedIn(false);
             });
     }, []);
-
 
     const login = (userData) => {
         setAuthUser(userData);
         setIsLoggedIn(true);
     };
 
-    // 2. Update the logout function
     const logout = async () => {
         try {
-            // Call the backend's logout endpoint
             await API.post('/users/logout');
-            
-            // Clear the frontend state
-            setAuthUser(null);
-            setIsLoggedIn(false);
         } catch (error) {
-            console.error("Logout failed:", error);
-            // We should still log out the user on the frontend even if the API call fails
+            console.error("Logout API call failed:", error);
+        } finally {
+            // Always clear the frontend state
             setAuthUser(null);
             setIsLoggedIn(false);
         }
@@ -62,6 +52,7 @@ export const AuthProvider = ({ children }) => {
         logout
     };
 
+    // THE FIX: This now ALWAYS renders your application.
     return (
         <AuthContext.Provider value={value}>
             {children}

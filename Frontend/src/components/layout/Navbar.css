@@ -108,3 +108,19 @@
 .nav-button:active {
     transform: scale(0.96);
 }
+
+.nav-avatar {
+    width: 40px;
+    min-width: 40px; /* This is a key fix: prevents it from growing larger */
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 10px;
+    object-fit: cover; /* This ensures the image inside is scaled correctly */
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.nav-avatar:hover {
+    border-color: #3ea6ff;
+}

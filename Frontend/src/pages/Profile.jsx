@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import API from '../services/api.js';
 import VideoCard from '../components/video/VideoCard.jsx';
-import ProfileCard from '../components/user/ProfileCard.jsx'; // 1. Import the component
-import './Profile.css';
+import ProfileCard from '../components/user/ProfileCard.jsx';
+import './Profile.css'; // Make sure this import is here
 
 function Profile() {
     const { authUser } = useAuth();
     const [channelData, setChannelData] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // This data fetching logic remains the same
     useEffect(() => {
         if (authUser?.username) {
             API.get(`/users/c/${authUser.username}`)
@@ -29,11 +28,8 @@ function Profile() {
 
     return (
         <div className='profile-page'>
-            {/* 2. Use the ProfileCard component and pass the data to it */}
             <ProfileCard channel={channelData} />
-            
             <hr className='separator' />
-
             <div className='profile-videos-grid'>
                 <h2>Uploaded Videos</h2>
                 <div className='video-grid'>
