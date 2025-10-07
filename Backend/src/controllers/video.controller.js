@@ -7,10 +7,76 @@ import asyncHandler from "../utils/asyncHandler.js"
 import {uploadCloudinary} from "../utils/cloudinary.js"
 import { v2 as cloudinary } from "cloudinary";
 
+
+
 const getAllVideos = asyncHandler(async (req, res) => {
-    const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
-    //TODO: get all videos based on query, sort, pagination
+    // 1. Get all the options from the URL's query parameters
+    const { page = 1, limit = 9, query, sortBy, sortType, userId } = req.query;
+
+    // 2. Create an empty object for the main filter condition ($match)
+    const matchStage = {};
+
+    // 3. If a search query is provided, add a $text search to the filter
+    //    (This requires the text index we created in the Video model)
+    if (query) {
+        matchStage.$text = { $search: query };
+    }
+
+    // 4. If a userId is provided, add a filter to only find videos by that user
+    if (userId) {
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+             throw new ApiError(400, "Invalid userId format");
+        }
+        matchStage.owner = new mongoose.Types.ObjectId(userId);
+    }
+    
+    // 5. Always ensure we only get videos that are marked as published
+    matchStage.isPublished = true;
+
+    // 6. Create the main aggregation pipeline array, starting with our filter
+    const pipeline = [
+        { $match: matchStage }
+    ];
+
+    // 7. Create a sort stage. Default to newest videos first if not specified.
+    const sortStage = {};
+    if (sortBy && sortType) {
+        sortStage[sortBy] = sortType === 'desc' ? -1 : 1;
+    } else {
+        sortStage.createdAt = -1;
+    }
+    
+    // 8. Add other stages to the pipeline: lookup owner details and then sort
+    pipeline.push(
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "ownerDetails",
+                pipeline: [{ $project: { username: 1, avatar: 1 } }]
+            }
+        },
+        { $addFields: { owner: { $first: "$ownerDetails" } } },
+        { $project: { ownerDetails: 0 } },
+        { $sort: sortStage }
+    );
+
+    // 9. Set up the options for pagination
+    const options = {
+        page: parseInt(page, 10),
+        limit: parseInt(limit, 9)
+    };
+
+    // 10. Execute the aggregation pipeline with pagination
+    const videos = await Video.aggregatePaginate(pipeline, options);
+
+    // 11. Return the paginated data as the final response
+    return res
+        .status(200)
+        .json(new ApiResponse(200, videos, "Videos fetched successfully"));
 });
+
 
 
 const publishAVideo = asyncHandler(async (req, res) => {

@@ -12,10 +12,7 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
-app.get("/"  , (req,res) =>{
-    res.send("Hello Devansh")
 
-})
 
 // Routes
 
@@ -24,7 +21,7 @@ import videoRouter from "./routes/video.routes.js"
 
 
 app.use("/api/v1/users", userRouter)
-app.use("/api/v1/video" , videoRouter)
+app.use("/api/v1/videos" , videoRouter)
 //http://localhost:8000/api/v1/users/register
 
 export { app } 

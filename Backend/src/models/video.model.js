@@ -43,6 +43,8 @@ const videoSchema  = new Schema(
         timestamps: true
     }
 )
+//  Added the text index for search functionality
+videoSchema.index({ title: 'text', discription: 'text' });
 
 videoSchema.plugin(mongooseAggregatePaginate)
 
