@@ -169,7 +169,7 @@ const getVideoById = asyncHandler(async (req, res) => {
     if( video.length === 0){
         throw new ApiError(404, "video is not found")
     }
-    return req
+    return res
     .status(200)
     .json(new ApiResponse(
         200,

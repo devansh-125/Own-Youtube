@@ -5,22 +5,26 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 // Import your page components
-import Home from './pages/Home.jsx'
-// import Login from './pages/Login.jsx'
-// import Register from './pages/Register.jsx'
+import Home from './pages/Home.jsx';
+import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
+import History from './pages/History.jsx';
+import VideoDetail from './pages/VideoDetail.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />, // The App component is the layout
+    element: <App />,
     children: [
-      {
-        path: '',
-        element: <Home /> // Home page is the default child
-      }
+      { path: '', element: <Home /> },
+      { path: 'login', element: <Login /> },
+      { path: 'signup', element: <Signup /> },
+      { path: 'history', element: <History /> },
+      { path: 'video/:videoId', element: <VideoDetail /> }
     ]
   }
-])
+]);
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
