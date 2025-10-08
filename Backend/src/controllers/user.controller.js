@@ -376,11 +376,11 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
 
 
-const getUserChannelProfile = asyncHandler( async(req,res) => {
-    const {username} = req.params
+const getUserChannelProfile = asyncHandler(async (req, res) => {
+    const { username } = req.params;
 
-    if(!username?.trim()){
-        throw new ApiError(400, "username is missing")
+    if (!username?.trim()) {
+        throw new ApiError(400, "username is missing");
     }
 
     const channel = await User.aggregate([
@@ -396,14 +396,13 @@ const getUserChannelProfile = asyncHandler( async(req,res) => {
                 foreignField: "channel",
                 as: "subscribers"
             }
-
         },
         {
             $lookup: {
                 from: "subscriptions",
                 localField: "_id",
                 foreignField: "subscriber",
-                as : "subscribedTo"
+                as: "subscribedTo"
             }
         },
         {
@@ -411,29 +410,47 @@ const getUserChannelProfile = asyncHandler( async(req,res) => {
                 from: "videos",
                 localField: "_id",
                 foreignField: "owner",
-                as: "videos"
+                as: "videos",
+                pipeline: [
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "ownerDetails",
+                            pipeline: [
+                                {
+                                    $project: {
+                                        username: 1,
+                                        avatar: 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $addFields: {
+                            owner: { $first: "$ownerDetails" }
+                        }
+                    },
+                    {
+                        $project: { ownerDetails: 0 }
+                    }
+                ]
             }
-
         },
         {
             $addFields: {
-                subscribersCount: {
-                    $size: "$subscribers"
-                },
-                channelsSubscribedToCount: {
-                    $size: "$subscribedTo"
-                },
-                videosCount: {
-                    $size: "$videos"
-                },
+                subscribersCount: { $size: "$subscribers" },
+                channelsSubscribedToCount: { $size: "$subscribedTo" },
+                videosCount: { $size: "$videos" },
                 isSubscribed: {
                     $cond: {
-                        if: {$in: [req.user?._id, "$subscribers.subscriber"]},
+                        if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
                         else: false
                     }
                 }
-
             }
         },
         {

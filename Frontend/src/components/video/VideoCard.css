@@ -92,3 +92,25 @@
     transform: scale(1.03); /* Grow slightly on hover */
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
 }
+
+.video-card-container {
+    position: relative; /* This is needed for the button positioning */
+}
+
+.edit-video-btn {
+    position: absolute;
+    bottom: 80px; /* Adjust as needed */
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.2s;
+}
+
+.video-card-container:hover .edit-video-btn {
+    opacity: 1; /* Show on hover */
+}

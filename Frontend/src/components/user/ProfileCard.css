@@ -6,17 +6,20 @@
     border: 1px solid #2d2d2d;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
+
 .cover-image {
     width: 100%;
     height: 250px;
     object-fit: cover;
     background-color: #222;
 }
+
 .profile-details {
     display: flex;
     align-items: center;
     padding: 0 2rem 1.5rem 2rem;
 }
+
 .profile-avatar-page {
     width: 150px;
     height: 150px;
@@ -27,15 +30,47 @@
     background-color: #222;
     transition: transform 0.2s ease-in-out;
 }
+
 .profile-avatar-page:hover {
     transform: scale(1.05);
 }
+
+.profile-text {
+    flex-grow: 1; /* Allows the profile text to take up available space */
+}
+
 .profile-text h1 {
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
 }
+
 .profile-text p {
     margin: 0.25rem 0;
     color: #aaa;
+}
+
+.profile-actions {
+    margin-left: auto; /* Pushes this div to the far right */
+}
+
+.upload-video-btn-profile {
+    background-color: #3ea6ff;
+    color: #0f0f0f;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.upload-video-btn-profile:hover {
+    background-color: #66bfff;
+}
+
+.upload-video-btn-profile:active {
+    transform: scale(0.98);
 }

@@ -12,6 +12,8 @@ import Signup from './pages/Signup.jsx';
 import History from './pages/History.jsx';
 import VideoDetail from './pages/VideoDetail.jsx';
 import Profile from './pages/Profile.jsx'
+import UploadVideo from './pages/UploadVideo.jsx'
+import EditVideo from './pages/EditVideo.jsx'
 
 const router = createBrowserRouter([
   {
@@ -23,7 +25,9 @@ const router = createBrowserRouter([
       { path: 'signup', element: <Signup /> },
       { path: 'history', element: <History /> },
       { path: 'video/:videoId', element: <VideoDetail /> },
-      { path: 'profile', element: <Profile /> }
+      { path: 'profile', element: <Profile /> },
+      { path: 'upload-video', element: <UploadVideo /> },
+      { path : 'edit-video/:videoId', element: <EditVideo /> }
     ]
   }
 ]);
