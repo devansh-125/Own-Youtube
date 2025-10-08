@@ -6,8 +6,6 @@ import {
     updateVideo,
     deleteVideo,
     togglePublishStatus,
-    toggleVideoLike,
-    toggleVideoDislike // We will create this controller next
 } from "../controllers/video.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -38,8 +36,5 @@ router.route("/:videoId")
     .patch(upload.single("thumbnail"), updateVideo);
 
 router.route("/toggle/publish/:videoId").patch(togglePublishStatus);
-router.route("/toggle/like/:videoId").patch(toggleVideoLike);
-router.route("/toggle/dislike/:videoId").patch(toggleVideoDislike);
-
 
 export default router;

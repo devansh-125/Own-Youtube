@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import API from '../../services/api.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 import './LikeButton.css';
 
 function LikeButton({ video }) {
+    const { authUser } = useAuth();
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [isDisliked, setIsDisliked] = useState(false);
     
-    // This is a placeholder. We'll replace this with a real authentication system later.
-    const currentUserId = "68e00b0e4fb3a7b287ac378b";
+    const currentUserId = authUser?._id;
 
     useEffect(() => {
         if (video) {
-            setLikeCount(video.likes?.length || 0);
+            // --- THIS IS THE FIX ---
+            // Set the initial like count from the video data
+            setLikeCount(video.likes?.length || 0); 
+            
+            // This part correctly sets whether the button should be active
             if (currentUserId) {
                 setIsLiked(video.likes?.includes(currentUserId) || false);
                 setIsDisliked(video.dislikes?.includes(currentUserId) || false);
@@ -23,7 +28,6 @@ function LikeButton({ video }) {
     const handleToggleLike = async () => {
         if (!currentUserId) return alert("Please log in to like videos!");
 
-        // Optimistic UI update
         const originalIsLiked = isLiked;
         const originalIsDisliked = isDisliked;
         
@@ -32,7 +36,7 @@ function LikeButton({ video }) {
         if (originalIsDisliked) setIsDisliked(false);
 
         try {
-            await API.patch(`/videos/toggle/like/${video._id}`);
+            await API.patch(`/likes/toggle/video/${video._id}`);
         } catch (error) {
             console.error("Failed to toggle like:", error);
             // Revert UI on API error
@@ -55,8 +59,7 @@ function LikeButton({ video }) {
         }
         
         try {
-            // NOTE: This API endpoint doesn't exist on the backend yet.
-            await API.patch(`/videos/toggle/dislike/${video._id}`);
+            await API.patch(`/likes/toggle/dislike/${video._id}`);
         } catch (error) {
             console.error("Failed to toggle dislike:", error);
             // Revert UI on API error
@@ -72,13 +75,13 @@ function LikeButton({ video }) {
                 className={`like-btn ${isLiked ? 'active' : ''}`}
                 onClick={handleToggleLike}
             >
-               {likeCount} 👍 
+                👍 {likeCount}
             </button>
             <button 
                 className={`dislike-btn ${isDisliked ? 'active' : ''}`}
                 onClick={handleToggleDislike}
             >
-                👎 
+                👎
             </button>
         </div>
     );

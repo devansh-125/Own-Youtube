@@ -59,7 +59,7 @@ function VideoDetail() {
                 <span>{uploadDate}</span>
             </div>
             <div className='action-buttons'>
-                <LikeButton video={video} /> {/* 2. Use the component here */}
+                <LikeButton video={video} /> 
                 <button className='action-btn-placeholder'>🔗 Share</button>
             </div>
           </div>

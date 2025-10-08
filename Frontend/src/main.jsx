@@ -14,6 +14,7 @@ import VideoDetail from './pages/VideoDetail.jsx';
 import Profile from './pages/Profile.jsx'
 import UploadVideo from './pages/UploadVideo.jsx'
 import EditVideo from './pages/EditVideo.jsx'
+import LikedVideos from './pages/LikedVideos.jsx';
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,8 @@ const router = createBrowserRouter([
       { path: 'video/:videoId', element: <VideoDetail /> },
       { path: 'profile', element: <Profile /> },
       { path: 'upload-video', element: <UploadVideo /> },
-      { path : 'edit-video/:videoId', element: <EditVideo /> }
+      { path : 'edit-video/:videoId', element: <EditVideo /> },
+      { path: 'liked-videos', element: <LikedVideos /> },
     ]
   }
 ]);
