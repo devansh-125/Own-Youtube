@@ -16,6 +16,7 @@ import UploadVideo from './pages/UploadVideo.jsx'
 import EditVideo from './pages/EditVideo.jsx'
 import LikedVideos from './pages/LikedVideos.jsx';
 
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -30,16 +31,16 @@ const router = createBrowserRouter([
       { path: 'upload-video', element: <UploadVideo /> },
       { path : 'edit-video/:videoId', element: <EditVideo /> },
       { path: 'liked-videos', element: <LikedVideos /> },
+     
     ]
   }
 ]);
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    {/* 2. Wrap the RouterProvider with your AuthProvider */}
+  
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
-  </React.StrictMode>,
+    
 )

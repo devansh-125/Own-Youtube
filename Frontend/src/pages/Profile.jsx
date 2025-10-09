@@ -45,7 +45,9 @@ function Profile() {
 
     return (
         <div className='profile-page'>
+             <div className='profile-header-wrapper'> 
             <ProfileCard channel={channelData} />
+            </div>
             
             <hr className='separator' />
 

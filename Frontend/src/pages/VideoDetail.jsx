@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 import API from '../services/api.js';
 import './VideoDetail.css';
 import LikeButton from '../components/social/LikeButton.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 function VideoDetail() {
+  const { isLoggedIn } = useAuth();
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,6 +22,10 @@ function VideoDetail() {
 
           if (videoDataArray && videoDataArray.length > 0) {
             setVideo(videoDataArray[0]);
+            if (isLoggedIn) {
+              await API.post(`/users/history/${videoId}`);
+              console.log("Video added to watch history and view count updated.");
+            }
           } else {
             throw new Error("Video not found");
           }

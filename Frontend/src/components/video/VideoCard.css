@@ -1,51 +1,59 @@
-/* The main link container for the card */
+.video-card-container {
+    position: relative;
+    /* --- YEH FIX HAI --- */
+    /* Hum yahan se width, padding, aur margin hata denge */
+}
+
+/* Baaki saare styles jaise .video-card, .thumbnail-wrapper, etc. same rahenge */
+
 .video-card {
-    display: block; /* Allows setting width and margins */
+    display: block;
     width: 100%;
-    margin-bottom: 1.5rem;
     cursor: pointer;
-    text-decoration: none; /* Removes the default link underline */
-    color: inherit; /* Makes text color same as parent */
-    border-radius: 12px;
-    overflow: hidden; /* Ensures nothing spills outside the rounded corners */
-    transition: transform 0.2s ease-in-out;
+    text-decoration: none;
+    color: inherit;
 }
 
-.video-card:hover {
-    transform: translateY(-5px); /* Adds a slight lift effect on hover */
-}
-
-/* The video thumbnail image */
-.thumbnail-img {
+.thumbnail-wrapper {
     width: 100%;
-    aspect-ratio: 16 / 9; /* Forces a 16:9 widescreen aspect ratio */
-    object-fit: cover;
-    background-color: #333; /* A dark placeholder color while image loads */
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    background-color: #222;
+    border-radius: 12px;
+    transition: border-radius 0.2s ease-in-out;
 }
 
-/* Container for the avatar and text */
+.video-card-container:hover .thumbnail-wrapper {
+    border-radius: 0;
+}
+
+.thumbnail-img,
+.thumbnail-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .video-details {
     display: flex;
     align-items: flex-start;
-    padding: 12px 0;
+    position: relative;
+    padding-right: 30px;
 }
 
-/* The small, round channel avatar */
 .channel-avatar {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     margin-right: 12px;
-    background-color: #444;
 }
 
-/* Container for the title and channel name */
 .video-text {
     display: flex;
     flex-direction: column;
 }
 
-/* The main video title */
 .video-title {
     font-size: 1rem;
     font-weight: 600;
@@ -54,63 +62,66 @@
     line-height: 1.4;
 }
 
-/* The channel name text */
-.channel-name {
+.channel-name, .video-meta {
     font-size: 0.875rem;
-    color: white;
+    color: #aaa;
     margin-top: 4px;
 }
 
-.thumbnail-img,
-.thumbnail-video {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover; /* This is the most important property */
-    border-radius: 12px;
-    background-color: #222; /* Placeholder color */
-    margin-bottom: 0.75rem;
+.video-meta {
+    display: flex;
+    gap: 6px;
 }
 
-.video-card {
-    display: block;
-    width: 100%;
-    margin-bottom: 1.5rem;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: #181818; /* Add a base color */
-    
-    /* --- ANIMATION & SHADOW --- */
-    border: 1px solid #2d2d2d;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.video-card:hover {
-    transform: scale(1.03); /* Grow slightly on hover */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
-}
-
-.video-card-container {
-    position: relative; /* This is needed for the button positioning */
-}
-
-.edit-video-btn {
+.video-options {
     position: absolute;
-    bottom: 80px; /* Adjust as needed */
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+    bottom: 0;
+    right: 0;
+}
+
+.options-btn {
+    background: none;
     color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    text-decoration: none;
-    opacity: 0; /* Hidden by default */
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
     transition: opacity 0.2s;
 }
 
-.video-card-container:hover .edit-video-btn {
-    opacity: 1; /* Show on hover */
+.video-card-container:hover .options-btn {
+    opacity: 1;
+}
+
+.options-menu {
+    position: absolute;
+    bottom: 30px;
+    right: 0;
+    background-color: #282828;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    z-index: 100;
+}
+
+.options-menu button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.options-menu button:hover {
+    background-color: #3e3e3e;
+}
+
+.options-menu .delete-option {
+    color: #ff4d4d;
 }

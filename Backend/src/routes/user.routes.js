@@ -9,7 +9,8 @@ import { changeCurrentPassword,
          registerUser, 
          updateAccountDetails, 
          updateUserAvatar, 
-         updateUserCoverImage 
+         updateUserCoverImage ,
+         addToWatchHistory
         } from "../controllers/user.controller.js"
 
 import {upload} from "../middlewares/multer.middleware.js"
@@ -53,6 +54,8 @@ router.route("/cover-image").patch(verifyJWT, upload.single("coverImage") , upda
 router.route("/c/:username").get(verifyJWT , getUserChannelProfile)
 
 router.route("/history").get(verifyJWT ,getwatchHistory)
+
+router.route("/history/:videoId").post(verifyJWT ,addToWatchHistory)
 
  
 

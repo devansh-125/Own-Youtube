@@ -6,6 +6,7 @@ import { uploadCloudinary } from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
+import { Video } from "../models/video.model.js"
 
 // import {unlinkSync} from "fs"
 
@@ -543,6 +544,31 @@ const getwatchHistory = asyncHandler(async(req, res) => {
 });
 
 
+
+const addToWatchHistory = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+    const userId = req.user._id;
+
+    if (!mongoose.Types.ObjectId.isValid(videoId)) {
+        throw new ApiError(400, "Invalid videoId");
+    }
+ 
+    await User.findByIdAndUpdate(userId, {
+        $addToSet: { watchHistory: videoId }
+    });
+
+    await Video.findByIdAndUpdate(videoId, {
+        $inc: { views: 1 }
+    });
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {}, "Added to watch history and view count updated"));
+});
+
+
+
+
 export {
     registerUser,
     loginUser,
@@ -554,6 +580,6 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getwatchHistory
-
+    getwatchHistory,
+    addToWatchHistory
 }

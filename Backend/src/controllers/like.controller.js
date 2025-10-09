@@ -4,14 +4,7 @@ import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import asyncHandler from "../utils/asyncHandler.js"
 import { Video } from "../models/video.model.js";
-
-
-
-const toggleCommentLike = asyncHandler(async (req, res) => {
-    const {commentId} = req.params
-    //TODO: toggle like on comment
-
-})
+import { Comment } from "../models/comment.model.js"
 
 const getLikedVideos = asyncHandler(async (req, res) => {
     const userId = req.user._id;
@@ -133,6 +126,40 @@ const toggleVideoDislike = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(200, { isDisliked: !isDisliked }, "Dislike status toggled successfully"));
 
+});
+
+
+const toggleCommentLike = asyncHandler(async (req, res) => {
+    const {commentId} = req.params;
+    const userId = req.user._id;
+
+    if (!isValidObjectId(commentId)) {
+        throw new ApiError(400, "Invalid Comment ID");
+    }
+
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+        throw new ApiError(404, "Comment not found");
+    }
+
+    // Check if the user has already liked this comment
+    const existingLike = await Like.findOne({
+        comment: commentId,
+        likedBy: userId
+    });
+
+    if (existingLike) {
+        // If like exists, remove it
+        await Like.findByIdAndDelete(existingLike._id);
+        return res.status(200).json(new ApiResponse(200, { isLiked: false }, "Comment unliked successfully"));
+    } else {
+        // If like does not exist, create it
+        await Like.create({
+            comment: commentId,
+            likedBy: userId
+        });
+        return res.status(200).json(new ApiResponse(200, { isLiked: true }, "Comment liked successfully"));
+    }
 });
 
 export {

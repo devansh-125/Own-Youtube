@@ -1,9 +1,10 @@
 .login-container {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
     padding: 2rem;
+    box-sizing: border-box;
 }
 
 .login-form-wrapper {
@@ -15,17 +16,10 @@
     max-width: 400px;
     text-align: center;
 }
-
 .login-title {
     margin-bottom: 1.5rem;
     font-size: 1.75rem;
     font-weight: 600;
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
 }
 
 .input-group {

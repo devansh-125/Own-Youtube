@@ -1,12 +1,18 @@
 .navbar {
-    padding: 12px 24px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #212121; /* A dark YouTube-like color */
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  height: 70px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #202020;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
 }
+
+
 
 .nav-container {
     display: flex;
