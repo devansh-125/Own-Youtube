@@ -1,0 +1,46 @@
+.comment-section {
+    margin-top: 2rem;
+}
+
+.comment-count {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.add-comment-form {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.comment-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #717171;
+    color: white;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    resize: none;
+    outline: none;
+}
+
+.comment-input:focus {
+    border-bottom-color: white;
+}
+
+.comment-submit-btn {
+    background-color: #3ea6ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+}

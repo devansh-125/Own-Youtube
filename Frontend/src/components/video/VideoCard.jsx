@@ -2,30 +2,13 @@ import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../../services/api.js';
 import './VideoCard.css';
+import { formatTimeAgo } from '../utils/helpers.js';
 
 // --- Helper Functions ---
 const formatViews = (views) => {
     if (views >= 1000000) return (views / 1000000).toFixed(1) + 'M views';
     if (views >= 1000) return (views / 1000).toFixed(0) + 'K views';
     return views + ' views';
-};
-
-const formatTimeAgo = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now - date) / 1000);
-
-    let interval = seconds / 31536000;
-    if (interval > 1) return Math.floor(interval) + " years ago";
-    interval = seconds / 2592000;
-    if (interval > 1) return Math.floor(interval) + " months ago";
-    interval = seconds / 86400;
-    if (interval > 1) return Math.floor(interval) + " days ago";
-    interval = seconds / 3600;
-    if (interval > 1) return Math.floor(interval) + " hours ago";
-    interval = seconds / 60;
-    if (interval > 1) return Math.floor(interval) + " minutes ago";
-    return Math.floor(seconds) + " seconds ago";
 };
 
 
@@ -93,7 +76,6 @@ function VideoCard({ video, onProfilePage = false }) {
             </div>
           </div>
 
-          {/* --- YEH FIX HAI: Menu ko video-details ke andar move kar diya --- */}
           {onProfilePage && (
             <div className="video-options">
                 <button className="options-btn" onClick={handleMenuClick}>

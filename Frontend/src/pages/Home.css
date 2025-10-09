@@ -1,7 +1,8 @@
 .home-container {
     padding: 1.5rem;
-    background-color: #0f0f0f; 
+    background-color: black; 
     color: white;
+    border: 6px ridge gray; 
 }
 
 .video-grid {

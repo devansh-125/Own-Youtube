@@ -4,6 +4,7 @@ import API from '../services/api.js';
 import './VideoDetail.css';
 import LikeButton from '../components/social/LikeButton.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import CommentList from '../components/social/CommentList.jsx';
 
 function VideoDetail() {
   const { isLoggedIn } = useAuth();
@@ -86,6 +87,7 @@ function VideoDetail() {
         <div className='video-description-box'>
           <p>{video.discription}</p>
         </div>
+         <CommentList videoId={videoId} />
       </div>
 
       <div className='secondary-column'>

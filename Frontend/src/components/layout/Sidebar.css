@@ -1,10 +1,10 @@
 .sidebar {
     min-width: 240px;
     width: 240px;
-    background-color: #0f0f0f;
-    min-height: calc(100vh - 80px); /* Adjust based on your header/footer height */
+    background-color: black;
+    min-height: calc(100vh - 80px);
     padding-top: 1rem;
-    border-right: 1px solid #3d3d3d;
+    border: 6px ridge gray; 
 }
 
 .sidebar-links {
@@ -38,4 +38,10 @@
 .sidebar-link .icon {
     margin-right: 20px;
     font-size: 1.2rem;
+}
+
+body {
+    background-color: black; /* Dark background to see the border clearly */
+    margin: 0;
+    padding: 20px; /* Add some space around the sidebar */
 }
