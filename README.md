@@ -91,12 +91,22 @@ You’ll need:
     ```env
     PORT=8000
     MONGODB_URI=your_mongodb_connection_string
-    CORS_ORIGIN=*
-    ACCESS_TOKEN_SECRET=your_access_token_secret
-    REFRESH_TOKEN_SECRET=your_refresh_token_secret
-    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-    CLOUDINARY_API_KEY=your_cloudinary_api_key
-    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+    CORS_ORIGIN=http://localhost:5173
+
+   # Tokens and Secrets
+   ACCESS_TOKEN_SECRET=your_super_secret_access_token
+   REFRESH_TOKEN_SECRET=your_super_secret_refresh_token
+   SESSION_SECRET=your_long_random_session_secret_string
+
+   # Cloudinary Credentials
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   
+   # Google OAuth 2.0 Credentials
+   GOOGLE_CLIENT_ID=your_google_client_id_from_gcp
+   GOOGLE_CLIENT_SECRET=your_google_client_secret_from_gcp
+   GOOGLE_CALLBACK_URL=http://localhost:8000/api/v1/users/google/callback
     ```
 
 3.  **Setup the Frontend:**
