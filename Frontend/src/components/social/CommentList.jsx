@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import API from '../../services/api.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import CommentBox from './CommentBox.jsx';
+import EmojiInput from '../common/EmojiInput.jsx';
 import './CommentList.css';
 
 function CommentList({ videoId }) {
@@ -14,7 +15,8 @@ function CommentList({ videoId }) {
         try {
             setLoading(true);
             const response = await API.get(`/comments/${videoId}`);
-            setComments(response.data.data.docs);
+            // Make sure to handle cases where docs might not exist
+            setComments(response.data?.data?.docs || []); 
         } catch (error) {
             console.error("Failed to fetch comments:", error);
         } finally {
@@ -34,13 +36,21 @@ function CommentList({ videoId }) {
 
         try {
             await API.post(`/comments/${videoId}`, { content: newComment });
-            setNewComment(""); // Clear the input box
-            fetchComments(); // Refresh the comment list
+            setNewComment("");
+            fetchComments();
         } catch (error) {
             console.error("Failed to post comment:", error);
             alert("Failed to post comment. Please try again.");
         }
     };
+
+    // --- THIS IS THE FIX ---
+    // We create an explicit handler function to update the state.
+    // This makes the data flow clear and prevents state update issues.
+    const handleCommentChange = (text) => {
+        setNewComment(text);
+    };
+    // -----------------------
 
     return (
         <div className="comment-section">
@@ -49,13 +59,22 @@ function CommentList({ videoId }) {
             {isLoggedIn && (
                 <form onSubmit={handleCommentSubmit} className="add-comment-form">
                     <img src={authUser?.avatar} alt="Your avatar" className="comment-avatar" />
-                    <textarea
-                        className="comment-input"
-                        placeholder="Add a comment..."
+                    
+                    <EmojiInput
+                        as="textarea"
                         value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
+                        onChange={handleCommentChange} // Pass the new handler function
+                        placeholder="Add a comment..."
+                        theme="dark"
                     />
-                    <button type="submit" className="comment-submit-btn">Comment</button>
+                    
+                    <button 
+                        type="submit" 
+                        className="comment-submit-btn"
+                        disabled={!newComment.trim()}
+                    >
+                        Comment
+                    </button>
                 </form>
             )}
 
@@ -73,3 +92,4 @@ function CommentList({ videoId }) {
 }
 
 export default CommentList;
+

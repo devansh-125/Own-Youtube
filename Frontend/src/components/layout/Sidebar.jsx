@@ -1,8 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
-import { set } from 'mongoose';
-
 
 
 function Sidebar() {

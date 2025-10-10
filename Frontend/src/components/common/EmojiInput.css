@@ -1,0 +1,49 @@
+/* Styles for the EmojiInput component */
+.emoji-input-wrapper {
+    position: relative;
+    width: 100%;
+    flex-grow: 1; 
+}
+
+
+.text-input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #717171;
+    color: white;
+    font-size: 1rem;
+    padding: 8px 40px 8px 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.2s ease-in-out;
+    resize: none; 
+}
+
+.text-input:focus {
+    outline: none;
+    border-bottom: 2px solid white;
+}
+
+.emoji-toggle-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 4px;
+}
+
+/* This positions the emoji picker pop-up */
+.picker-container {
+    position: absolute;
+    bottom: 100%; 
+    right: 0;
+    z-index: 20;
+    margin-bottom: 8px;
+}
+
