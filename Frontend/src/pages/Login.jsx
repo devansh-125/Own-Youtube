@@ -82,8 +82,17 @@ function Login() {
                             required
                         />
                     </div>
+                    <br />
                     <button type='submit' className='login-btn'>Log In</button>
                 </form>
+                <div className='divider'>
+                    <span>OR</span>
+                </div>
+
+                <a href="http://localhost:8000/api/v1/users/google" className='google-login-btn'>
+                    <img src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_28dp.png" alt="Google icon" />
+                    Sign in with Google
+                </a>
 
                 <p className='signup-link'>
                     Don't have an account? <Link to="/signup">Sign Up</Link>

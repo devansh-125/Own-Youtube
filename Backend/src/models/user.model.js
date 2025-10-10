@@ -30,7 +30,9 @@ const userSchema = new mongoose.Schema(
             required: true
         },
         coverImage: {
-            type: String, 
+           type: String,
+           default: "https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+
         },
         watchHistory: [
             {
@@ -40,10 +42,15 @@ const userSchema = new mongoose.Schema(
         ],
         password: {
             type: String,
-            required: [true, 'password is required']
+            required: function() {return !this.googleId;}
         },
         refreshToken: {
             type: String
+        },
+        googleId: {
+            type: String,
+            unique: true,
+            sparse: true // Allows multiple null values
         }
     },
     {

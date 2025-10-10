@@ -64,12 +64,6 @@ function Profile() {
                         <div className='empty-state-icon'>📝</div>
                         <h3>No content available</h3>
                         <p>Start sharing your story with the world. Click the button below to upload your first video.</p>
-                        <button 
-                            className='upload-videos-btn'
-                            onClick={() => navigate('/upload-video')}
-                        >
-                            UPLOAD VIDEOS
-                        </button>
                     </div>
                 )}
             </div>

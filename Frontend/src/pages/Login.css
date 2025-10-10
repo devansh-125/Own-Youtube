@@ -44,8 +44,9 @@
 }
 
 .login-btn {
-    padding: 0.75rem;
+    padding: 1rem;
     border: none;
+    width : 30%;
     border-radius: 8px;
     background-color: #3ea6ff;
     color: white;
@@ -80,4 +81,56 @@
 
 .signup-link a:hover {
     text-decoration: underline;
+}
+
+
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #aaa;
+    margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #3d3d3d;
+}
+
+.divider:not(:empty)::before {
+    margin-right: .25em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: .25em;
+}
+
+.google-login-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #3d3d3d;
+    border-radius: 8px;
+    background-color: #121212;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.google-login-btn:hover {
+    background-color: #272727;
+}
+
+.google-login-btn img {
+    width: 20px;
+    height: 20px;
 }

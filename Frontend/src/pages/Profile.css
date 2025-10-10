@@ -1,57 +1,76 @@
+/* Main container for the entire profile page */
 .profile-page {
-    color: white;
-    border: 6px ridge gray; 
-    padding: 0; 
+  padding: 0 24px;
+  color: #fff;
 }
 
-.profile-header-wrapper {
-    padding: 2rem;
-}
-
+/* A subtle, modern separator line */
 .separator {
-    border: none;
-    height: 1px;
-    background-color: #3f3f3f;
-    margin: 0; 
+  border: none;
+  height: 1px;
+  background-color: #373737;
+  margin: 24px 0;
 }
 
+/* Container for the uploaded videos section */
 .profile-videos-grid {
-    padding: 2rem;
+  padding: 16px 0;
 }
 
 .profile-videos-grid h2 {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
+  font-size: 1.5rem;
+  margin-bottom: 24px;
 }
 
-.video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 1.5rem;
-}
-
-.status-message {
-    padding: 2rem;
-    text-align: center;
-    font-size: 1.2rem;
-}
-
-.status-message.error {
-    color: #ff4d4d;
-}
-
-/* Empty state styles */
+/* This is the key section for the "No content" message */
 .empty-videos-state {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 4rem 2rem;
-    margin-top: 2rem;
-    background-color: #121212;
-    border-radius: 12px;
-    text-align: center;
-    color: #aaa;
+  display: flex; /* Turn on Flexbox */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  text-align: center; /* Center all text */
+  min-height: 40vh; /* Give it some height to properly center */
+  padding: 40px;
+  background-color: #1a1a1a;
+  border-radius: 12px;
 }
-/* ... baaki empty state styles ... */
+
+.empty-state-icon {
+  font-size: 3rem; /* Make the icon larger */
+  margin-bottom: 16px;
+}
+
+.empty-videos-state h3 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.empty-videos-state p {
+  color: #aaa;
+  max-width: 400px; /* Keep the text from getting too wide */
+  margin-bottom: 24px;
+}
+
+.upload-videos-btn {
+  background-color: #ae7aff; /* A nice purple accent color */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.upload-videos-btn:hover {
+  background-color: #9960e6;
+}
+
+/* Styles for the grid when videos ARE present */
+.video-grid {
+  display: grid;
+  /* Create a responsive grid that makes as many columns as fit */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}

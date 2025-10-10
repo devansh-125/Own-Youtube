@@ -12,20 +12,38 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        // This runs once when the app loads to check if a user is already logged in
-        API.get('/users/current-user')
-            .then(response => {
-                if (response.data.data) {
-                    setAuthUser(response.data.data);
+        const checkAuthStatus = async () => {
+            try {
+                // Step A: First, try to get the user via the session route (for Google)
+                const sessionResponse = await API.get('/users/session/current-user');
+                
+                if (sessionResponse.data.data) {
+                    setAuthUser(sessionResponse.data.data);
                     setIsLoggedIn(true);
+                    return; // Found the user, so we stop here.
                 }
-            })
-            .catch(error => {
-                // This error is expected if no one is logged in.
-                console.log("No active session found.");
-                setAuthUser(null);
-                setIsLoggedIn(false);
-            });
+            } catch (sessionError) {
+                // This error is expected if the user is not logged in via a session.
+                // So, we'll now try to get the user via the JWT route.
+                try {
+                    // Step B: If the session route fails, try the JWT route
+                    const jwtResponse = await API.get('/users/current-user');
+
+                    if (jwtResponse.data.data) {
+                        setAuthUser(jwtResponse.data.data);
+                        setIsLoggedIn(true);
+                        return; // Found the user, so we stop here.
+                    }
+                } catch (jwtError) {
+                    // If this also fails, the user is definitely not logged in.
+                    console.log("No active session or valid JWT found.");
+                    setAuthUser(null);
+                    setIsLoggedIn(false);
+                }
+            }
+        };
+
+        checkAuthStatus();
     }, []);
 
     const login = (userData) => {
@@ -35,11 +53,12 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
+            // NOTE: You may need a separate logout for session vs JWT
+            // For now, this just clears the frontend state.
             await API.post('/users/logout');
         } catch (error) {
             console.error("Logout API call failed:", error);
         } finally {
-            // Always clear the frontend state
             setAuthUser(null);
             setIsLoggedIn(false);
         }
@@ -52,7 +71,6 @@ export const AuthProvider = ({ children }) => {
         logout
     };
 
-    // THE FIX: This now ALWAYS renders your application.
     return (
         <AuthContext.Provider value={value}>
             {children}
