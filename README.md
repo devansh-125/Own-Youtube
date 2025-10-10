@@ -1,44 +1,78 @@
 # 🎬 Own-Youtube
 
-A full-stack YouTube clone built with the MERN stack (MongoDB, Express.js, React.js, Node.js). This project includes user authentication, video uploading capabilities, and more.
+A **feature-rich full-stack YouTube clone** built using the **MERN Stack (MongoDB, Express.js, React.js, Node.js)**.  
+This project includes **dual authentication (JWT + Google OAuth)**, **video management**, **interactive features**, and a **modern responsive UI** — offering a near real YouTube-like experience.
+
+---
 
 ## ✨ Features
 
-* **User Authentication**: Secure user registration and login using JWT (JSON Web Tokens).
-* **Password Encryption**: Hashing user passwords with bcrypt for enhanced security.
-* **Video Uploads**: Seamless video file uploads to Cloudinary, handled by Multer for server-side processing.
-* **Database Management**: MongoDB with Mongoose for robust data modeling and management of users, videos, etc.
-* **API Communication**: Axios for making asynchronous HTTP requests from the client to the server.
+### 🔐 Authentication
+* **JWT Authentication**: Secure user registration and login with JSON Web Tokens.
+* **Google OAuth 2.0**: Social login for seamless and secure access.
+* Unified middleware to protect routes using both authentication methods.
+
+### 🎥 Video Management
+* Upload videos with custom titles, descriptions, and thumbnails.
+* Videos and thumbnails are stored on **Cloudinary** for scalable media handling.
+* Users can view, edit, and delete their own videos.
+
+### 💬 Interactivity
+* **Like/Dislike System**: Users can like/unlike videos and comments.
+* **Comments Section**: Fully functional comment system under each video.
+* **Emoji Picker**: Add emojis to comments or video descriptions for a richer experience.
+
+### 👤 User Profiles & Channels
+* Each user has a public **channel page** with an avatar and cover image.
+* Displays channel information and uploaded videos in a grid format.
+
+### 🧭 Responsive UI
+* Built with **React.js** and optimized for all screen sizes (desktop, tablet, mobile).
+* Includes a **persistent sidebar**, **dynamic video grid**, and clean modern layout.
+
+### 🔒 Backend Security
+* User passwords are hashed using **bcrypt**.
+* File uploads handled securely using **Multer** middleware.
+* Data validated and sanitized to prevent injection or misuse.
+
+---
 
 ## 🛠️ Technology Stack
 
-### Backend
-* **[Node.js](https://nodejs.org/)**: JavaScript runtime environment.
-* **[Express.js](https://expressjs.com/)**: Web application framework for Node.js.
-* **[MongoDB](https://www.mongodb.com/)**: NoSQL database for storing data.
-* **[Mongoose](https://mongoosejs.com/)**: Object Data Modeling (ODM) library for MongoDB.
-* **[JWT (JSON Web Token)](https://jwt.io/)**: For secure user authentication.
-* **[Bcrypt](https://www.npmjs.com/package/bcrypt)**: Library for hashing passwords.
-* **[Multer](https://github.com/expressjs/multer)**: Middleware for handling `multipart/form-data` (file uploads).
-* **[Cloudinary](https://cloudinary.com/)**: Cloud platform for image and video management.
+### ⚙️ Backend
+* **[Node.js](https://nodejs.org/)** – JavaScript runtime environment.
+* **[Express.js](https://expressjs.com/)** – Web framework for Node.js.
+* **[MongoDB](https://www.mongodb.com/)** – NoSQL database for storing user and video data.
+* **[Mongoose](https://mongoosejs.com/)** – ODM library for MongoDB.
+* **[JWT](https://jwt.io/)** – JSON Web Tokens for secure authentication.
+* **[Passport.js](http://www.passportjs.org/)** – Used for Google OAuth 2.0 authentication.
+* **[Bcrypt](https://www.npmjs.com/package/bcrypt)** – Library for hashing passwords.
+* **[Multer](https://github.com/expressjs/multer)** – Handles file uploads.
+* **[Cloudinary](https://cloudinary.com/)** – Cloud platform for video and image management.
 
-### Frontend
-* **[React.js](https://reactjs.org/)**: JavaScript library for building user interfaces.
-* **[Axios](https://axios-http.com/)**: Promise-based HTTP client for the browser and Node.js.
-* (You can add other frontend libraries like Tailwind CSS, Redux, etc. here)
+### 💻 Frontend
+* **[React.js](https://reactjs.org/)** – Library for building UI components.
+* **[React Router](https://reactrouter.com/)** – For client-side routing.
+* **[Axios](https://axios-http.com/)** – Promise-based HTTP client.
+* **[Emoji Picker React](https://github.com/ealush/emoji-picker-react)** – For emoji selection in forms.
+* *(Optional)* You can integrate **Tailwind CSS** or **Redux** for advanced state and style management.
 
 ---
 
 ## 🚀 Getting Started
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+Follow these steps to set up the project locally on your machine.
 
-### Prerequisites
+### 📋 Prerequisites
 
-You need to have the following installed on your machine:
-* Node.js (v18.x or higher)
-* npm or yarn
-* A MongoDB database (you can get a free one from [MongoDB Atlas](https://www.mongodb.com/cloud/atlas))
+You’ll need:
+* **Node.js** (v18.x or higher)
+* **npm** or **yarn**
+* A **MongoDB** database (use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) for free cloud storage)
+* A **Cloudinary account** for video/image hosting
+* A **Google Cloud Project** for OAuth credentials
+
+---
 
 ### Installation & Setup
 
@@ -79,7 +113,7 @@ You need to have the following installed on your machine:
     npm run dev
     ```
 
-2.  **Start the Frontend Development Server:**
+2.  **Start the Frontend Development Server:**![alt text](image.png)
     ```bash
     # From the Frontend directory
     npm run dev
