@@ -2,12 +2,11 @@
     padding: 1.5rem;
     background-color: black; 
     color: white;
-    border: 6px ridge gray; 
 }
 
 .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 1.5rem;
+  
 }
 

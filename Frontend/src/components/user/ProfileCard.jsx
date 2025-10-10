@@ -1,15 +1,16 @@
 import React from 'react';
+// Step 1: Import useNavigate
 import { useNavigate } from 'react-router-dom';
 import './ProfileCard.css';
 
 function ProfileCard({ channel }) {
+    // Step 2: Initialize the navigate function
     const navigate = useNavigate();
 
     if (!channel) {
         return null;
     }
 
-    // Add this new wrapper div
     return (
         <div className='profile-card-wrapper'>
             <div className='profile-header'>
@@ -19,7 +20,6 @@ function ProfileCard({ channel }) {
                     className='cover-image' 
                 />
                 <div className='profile-details'>
-                    {/* ... all your other content ... */}
                     <img 
                         src={channel.avatar} 
                         alt="Avatar" 
@@ -30,8 +30,13 @@ function ProfileCard({ channel }) {
                         <p>@{channel.username}</p>
                         <p>{channel.subscribersCount} Subscribers • {channel.videosCount} Videos</p>
                     </div>
+                    
                     <div className='profile-actions'>
-                        <button className='upload-video-btn-profile'>
+                        {/* Step 3: Add the onClick handler to the button */}
+                        <button 
+                            className='upload-video-btn-profile'
+                            onClick={() => navigate('/upload-video')}
+                        >
                             Upload Video
                         </button>
                     </div>

@@ -49,21 +49,36 @@ export const AuthProvider = ({ children }) => {
     const login = (userData) => {
         setAuthUser(userData);
         setIsLoggedIn(true);
-    };
+    }; 
 
     const logout = async () => {
         try {
-            // NOTE: You may need a separate logout for session vs JWT
-            // For now, this just clears the frontend state.
-            await API.post('/users/logout');
-        } catch (error) {
-            console.error("Logout API call failed:", error);
-        } finally {
+            // 1. Determine authentication type
+            const authType = localStorage.getItem('authType');
+
+            // 2. End session in backend
+            if (authType === 'google') {
+                await API.get('/users/logout/google', { withCredentials: true });
+            } else {
+                await API.post('/users/logout', {}, { withCredentials: true });
+            }
+
+            // 3. Clean local storage
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('authType');
+
+            // 4. Reset global context
             setAuthUser(null);
             setIsLoggedIn(false);
+
+            // 5. Redirect to login
+            window.location.href = '/login';
+        } catch (error) {
+            console.error("Logout failed:", error);
         }
     };
-
     const value = {
         authUser,
         isLoggedIn,

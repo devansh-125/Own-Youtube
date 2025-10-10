@@ -5,12 +5,12 @@ import {
     toggleVideoLike,
     toggleVideoDislike
 } from "../controllers/like.controller.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { verifyAuth } from "../middlewares/verifyAuth.middleware.js";
 
 const router = Router();
 
 // All like-related routes require a user to be logged in
-router.use(verifyJWT);
+router.use(verifyAuth);
 
 router.route("/toggle/video/:videoId").patch(toggleVideoLike);
 router.route("/toggle/dislike/:videoId").patch(toggleVideoDislike);

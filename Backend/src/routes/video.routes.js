@@ -7,22 +7,19 @@ import {
     deleteVideo,
     togglePublishStatus,
 } from "../controllers/video.controller.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
+
+import { verifyAuth } from "../middlewares/verifyAuth.middleware.js";
 
 const router = Router();
 
-// --- Public Routes ---
-// Anyone, logged in or not, can access these.
+// These routes are public and can be accessed by anyone.
 router.route("/").get(getAllVideos);
 router.route("/:videoId").get(getVideoById);
 
+router.use(verifyAuth);
 
-// --- Protected Routes ---
-// From this line onwards, a user MUST be logged in.
-// The `verifyJWT` middleware acts as a gatekeeper.
-router.use(verifyJWT);
-
+// Because of router.use() above, this route is now protected for all logged-in users.
 router.route("/").post(
     upload.fields([
         { name: "videoFile", maxCount: 1 },

@@ -24,7 +24,7 @@ function UploadVideo() {
 
         const formData = new FormData();
         formData.append('title', title);
-        formData.append('discription', description); // Using your 'discription' spelling
+        formData.append('discription', description); 
         formData.append('videoFile', videoFile);
         formData.append('thumbnail', thumbnail);
 

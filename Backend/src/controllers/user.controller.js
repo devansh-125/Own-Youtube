@@ -151,31 +151,47 @@ const loginUser = asyncHandler(async (req,res) =>{
 
 });
 
-
-const logoutUser = asyncHandler(async(req, res) => {
-    await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            $set: {
-                refreshToken: undefined
-            }
-        },
-        {
-            new: true
+const logoutUser = async (req, res) => {
+    try {
+        // Handle Google session logout
+        if (req.session?.passport?.user) {
+            req.session.destroy(err => {
+                if (err) {
+                    console.error("Session destroy error:", err);
+                    return res.status(500).json({
+                        success: false,
+                        message: "Failed to logout session"
+                    });
+                }
+                res.clearCookie('connect.sid', {
+                    path: '/',
+                    httpOnly: true,
+                    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                    secure: process.env.NODE_ENV === 'production'
+                });
+                return res.status(200).json({
+                    success: true,
+                    message: "Google session ended"
+                });
+            });
+        } else {
+            // Handle JWT-based logout
+            res.clearCookie("accessToken");
+            res.clearCookie("refreshToken");
+            return res.status(200).json({
+                success: true,
+                message: "JWT tokens cleared"
+            });
         }
-    )
-
-    const options = {
-        httpOnly: true,
-        secure: true
+    } catch (error) {
+        console.error("Logout error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Logout failed"
+        });
     }
+};
 
-    return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {}, "User logged Out"))
-});
 
 
 const refreshAccessToken = asyncHandler(async (req , res) =>{

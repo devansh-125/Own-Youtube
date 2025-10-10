@@ -5,7 +5,7 @@ import {
     // updateComment, // Baad mein add karenge
     // deleteComment  // Baad mein add karenge
 } from "../controllers/comment.controller.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { verifyAuth } from "../middlewares/verifyAuth.middleware.js";
 
 const router = Router();
 
@@ -13,7 +13,7 @@ const router = Router();
 router.route("/:videoId").get(getVideoComments);
 
 // POST comment route sirf logged-in users ke liye hai
-router.route("/:videoId").post(verifyJWT, addComment);
+router.route("/:videoId").post(verifyAuth, addComment);
 
 
 export default router;

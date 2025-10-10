@@ -1,6 +1,6 @@
 
 .navbar {
-  height: 70px;
+  height: 40px;
   width: 100%;
   background-color: black;
   position: sticky;
@@ -8,7 +8,8 @@
   z-index: 1000;
   padding: 0 1.5rem;
   box-sizing: border-box;
-  border: 6px ridge gray; 
+  /* border: 6px ridge whitesmoke;  */
+
 }
 
 .nav-container {

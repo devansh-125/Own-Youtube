@@ -4,7 +4,7 @@
     background-color: black;
     min-height: calc(100vh - 80px);
     padding-top: 1rem;
-    border: 6px ridge gray; 
+    /* border: 6px ridge gray;  */
 }
 
 .sidebar-links {

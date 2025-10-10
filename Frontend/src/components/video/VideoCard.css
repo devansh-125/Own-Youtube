@@ -1,127 +1,143 @@
-.video-card-container {
-    position: relative;
-    /* --- YEH FIX HAI --- */
-    /* Hum yahan se width, padding, aur margin hata denge */
-}
-
-/* Baaki saare styles jaise .video-card, .thumbnail-wrapper, etc. same rahenge */
-
 .video-card {
-    display: block;
-    width: 100%;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: white;
+  max-width: 500px; /* Prevents card from becoming too wide on large screens */
+  cursor: pointer;
 }
 
 .thumbnail-wrapper {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    margin-bottom: 0.75rem;
-    background-color: #222;
-    border-radius: 12px;
-    transition: border-radius 0.2s ease-in-out;
-}
-
-.video-card-container:hover .thumbnail-wrapper {
-    border-radius: 0;
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden; /* Ensures the image/video corners are rounded */
+  background-color: #222; /* A dark placeholder while content loads */
 }
 
 .thumbnail-img,
 .thumbnail-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Enforces a consistent 16:9 video shape */
+  object-fit: cover; /* Prevents content from being stretched */
+  display: block; /* Removes any extra space below the element */
+  transition: transform 0.3s ease; /* Adds a subtle zoom effect on hover */
+}
+
+.video-card:hover .thumbnail-img,
+.video-card:hover .thumbnail-video {
+    transform: scale(1.05); /* Zoom in slightly on hover */
 }
 
 .video-details {
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-    padding-right: 30px;
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  position: relative; /* This is crucial for positioning the options menu */
 }
 
 .channel-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    margin-right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0; /* Prevents the avatar from shrinking */
 }
 
 .video-text {
-    display: flex;
-    flex-direction: column;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .video-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: white;
-    margin: 0;
-    line-height: 1.4;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  /* Truncates long titles to two lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
 }
 
-.channel-name, .video-meta {
-    font-size: 0.875rem;
-    color: #aaa;
-    margin-top: 4px;
+.channel-name {
+  font-size: 0.875rem;
+  color: #aaa;
+  margin: 2px 0 0 0;
 }
 
 .video-meta {
-    display: flex;
-    gap: 6px;
+  display: flex;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #aaa;
+  margin-top: 4px;
 }
 
+/* --- Options Menu Styles --- */
+
 .video-options {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+  /* This container allows us to position the menu absolutely inside it */
+  position: relative; 
 }
 
 .options-btn {
-    background: none;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.2s;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
 }
 
-.video-card-container:hover .options-btn {
-    opacity: 1;
+.options-btn:hover {
+  background-color: #333;
+  color: #fff;
 }
 
+.options-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* The dropdown menu itself */
 .options-menu {
-    position: absolute;
-    bottom: 30px;
-    right: 0;
-    background-color: #282828;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    z-index: 100;
+  position: absolute; /* Lifts the menu out of the document flow */
+  top: 40px;      /* Positions it just below the three-dot button */
+  right: 0;
+  background-color: #282828;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 10; /* Ensures the menu appears on top of other content */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 120px; /* Gives the menu a consistent width */
 }
 
 .options-menu button {
-    background: none;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: left;
-    cursor: pointer;
-    width: 100%;
-    white-space: nowrap;
+  background: none;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
 }
 
 .options-menu button:hover {
-    background-color: #3e3e3e;
+  background-color: #3e3e3e;
 }
 
-.options-menu .delete-option {
-    color: #ff4d4d;
+.options-menu .delete-option:hover {
+  background-color: #d93025; /* Red for the delete action */
 }
+
