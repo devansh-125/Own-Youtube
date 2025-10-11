@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../services/api.js';
 import './UploadVideo.css';
+import EmojiInput from '../components/common/EmojiInput.jsx';
 
 function UploadVideo() {
     const navigate = useNavigate();
@@ -51,13 +52,26 @@ function UploadVideo() {
                 <h2 className='upload-title'>Upload Your Video</h2>
                 {error && <p className='error-message'>{error}</p>}
                 <form onSubmit={handleSubmit} className='upload-form'>
-                    <div className='input-group'>
+                   <div className='input-group'>
                         <label htmlFor='title'>Title</label>
-                        <input type='text' id='title' onChange={(e) => setTitle(e.target.value)} />
+                       
+                        <EmojiInput
+                            value={title}
+                            onChange={setTitle}
+                            placeholder="Enter a title for your video..."
+                            theme="dark"
+                        />
                     </div>
                     <div className='input-group'>
                         <label htmlFor='description'>Description</label>
-                        <textarea id='description' rows="4" onChange={(e) => setDescription(e.target.value)} />
+
+                        <EmojiInput
+                            as="textarea"
+                            value={description}
+                            onChange={setDescription}
+                            placeholder="Tell viewers about your video..."
+                            theme="dark"
+                        />
                     </div>
                     <div className='input-group'>
                         <label htmlFor='thumbnail'>Thumbnail Image (JPEG, PNG)</label>

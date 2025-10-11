@@ -44,9 +44,15 @@ function CommentList({ videoId }) {
         }
     };
 
-    // --- THIS IS THE FIX ---
-    // We create an explicit handler function to update the state.
-    // This makes the data flow clear and prevents state update issues.
+    const handleCommentDelete = (deletedCommentId) => {
+        setComments(prevComments => prevComments.filter(c => c._id !== deletedCommentId));
+    };
+
+    const handleCommentUpdate = (updatedComment) => {
+        setComments(prevComments => prevComments.map(c => c._id === updatedComment._id ? updatedComment : c));
+    };
+
+    // New handler for comment input change
     const handleCommentChange = (text) => {
         setNewComment(text);
     };
@@ -83,7 +89,12 @@ function CommentList({ videoId }) {
                     <p>Loading comments...</p>
                 ) : (
                     comments.map(comment => (
-                        <CommentBox key={comment._id} comment={comment} />
+                         <CommentBox
+                             key={comment._id}
+                             comment={comment}
+                             onCommentUpdated={handleCommentUpdate} 
+                             onCommentDeleted={handleCommentDelete} 
+                        />
                     ))
                 )}
             </div>

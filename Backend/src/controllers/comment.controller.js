@@ -56,8 +56,11 @@ const getVideoComments = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 likesCount: 1,
                 isLiked: 1,
-                "owner.username": 1,
-                "owner.avatar": 1
+                 owner: {
+                    _id: "$owner._id",
+                    username: "$owner.username",
+                    avatar: "$owner.avatar"
+                }
             }
         },
         { $sort: { createdAt: -1 } }
@@ -92,7 +95,8 @@ const addComment = asyncHandler(async (req, res) => {
     const comment = await Comment.create({
         content,
         video: videoId,
-        owner: userId
+        owner: userId,
+        createdAt: new Date()
     });
 
     if (!comment) {
@@ -104,7 +108,63 @@ const addComment = asyncHandler(async (req, res) => {
         .json(new ApiResponse(201, comment, "Comment added successfully"));
 });
 
+
+const updateComment = asyncHandler(async (req, res) => {
+    const { commentId } = req.params;
+    const { content } = req.body;
+    const userId = req.user._id;
+
+    if (!mongoose.isValidObjectId(commentId)) {
+        throw new ApiError(400, "Invalid Comment ID");
+    }
+
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+        throw new ApiError(404, "Comment not found");
+    }
+
+    if (comment.owner.toString() !== userId.toString()) {
+        throw new ApiError(403, "You are not authorized to update this comment");
+    }
+
+    comment.content = content || comment.content;
+    await comment.save();
+
+    await comment.populate("owner", "username avatar");
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, comment, "Comment updated successfully"));
+});
+
+const deleteComment = asyncHandler(async (req, res) => {
+    const { commentId } = req.params;
+    const userId = req.user._id;
+
+    if (!mongoose.isValidObjectId(commentId)) {
+        throw new ApiError(400, "Invalid Comment ID");
+    }
+
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+        throw new ApiError(404, "Comment not found");
+    }
+
+    if (comment.owner.toString() !== userId.toString()) {
+        throw new ApiError(403, "You are not authorized to delete this comment");
+    }
+
+    await Comment.findByIdAndDelete(commentId);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, {}, "Comment deleted successfully"));
+});
+
+
 export {
     getVideoComments,
-    addComment
+    addComment,
+    updateComment,
+    deleteComment
 };
