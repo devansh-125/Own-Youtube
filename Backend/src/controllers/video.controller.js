@@ -10,19 +10,14 @@ import { v2 as cloudinary } from "cloudinary";
 
 
 const getAllVideos = asyncHandler(async (req, res) => {
-    // 1. Get all the options from the URL's query parameters
     const { page = 1, limit = 9, query, sortBy, sortType, userId } = req.query;
 
-    // 2. Create an empty object for the main filter condition ($match)
     const matchStage = {};
 
-    // 3. If a search query is provided, add a $text search to the filter
-    //    (This requires the text index we created in the Video model)
     if (query) {
         matchStage.$text = { $search: query };
     }
 
-    // 4. If a userId is provided, add a filter to only find videos by that user
     if (userId) {
         if (!mongoose.Types.ObjectId.isValid(userId)) {
              throw new ApiError(400, "Invalid userId format");
@@ -30,23 +25,23 @@ const getAllVideos = asyncHandler(async (req, res) => {
         matchStage.owner = new mongoose.Types.ObjectId(userId);
     }
     
-    // 5. Always ensure we only get videos that are marked as published
     matchStage.isPublished = true;
 
-    // 6. Create the main aggregation pipeline array, starting with our filter
+    // 1. Create the pipeline and add the initial filter
     const pipeline = [
         { $match: matchStage }
     ];
 
-    // 7. Create a sort stage. Default to newest videos first if not specified.
+    // 2. Create and add the SORT stage *BEFORE* the lookup
     const sortStage = {};
     if (sortBy && sortType) {
         sortStage[sortBy] = sortType === 'desc' ? -1 : 1;
     } else {
         sortStage.createdAt = -1;
     }
+    pipeline.push({ $sort: sortStage });
     
-    // 8. Add other stages to the pipeline: lookup owner details and then sort
+    // 3. NOW, add the stages to lookup and shape the owner data
     pipeline.push(
         {
             $lookup: {
@@ -58,25 +53,22 @@ const getAllVideos = asyncHandler(async (req, res) => {
             }
         },
         { $addFields: { owner: { $first: "$ownerDetails" } } },
-        { $project: { ownerDetails: 0 } },
-        { $sort: sortStage }
+        { $project: { ownerDetails: 0 } }
     );
 
-    // 9. Set up the options for pagination
+    // 4. Set up the options for pagination (Corrected typo from 9 to 10)
     const options = {
         page: parseInt(page, 10),
-        limit: parseInt(limit, 9)
+        limit: parseInt(limit, 10) 
     };
 
-    // 10. Execute the aggregation pipeline with pagination
+    // 5. Execute the pipeline
     const videos = await Video.aggregatePaginate(pipeline, options);
 
-    // 11. Return the paginated data as the final response
     return res
         .status(200)
         .json(new ApiResponse(200, videos, "Videos fetched successfully"));
 });
-
 
 
 const publishAVideo = asyncHandler(async (req, res) => {
@@ -127,57 +119,86 @@ const publishAVideo = asyncHandler(async (req, res) => {
 });
 
 
-
 const getVideoById = asyncHandler(async (req, res) => {
-    const { videoId } = req.params
-    if(!videoId){
-        throw new ApiError(400 , "videoId is required")
-    }
+    const { videoId } = req.params;
 
     const video = await Video.aggregate([
         {
-            $match: {
-                _id: new mongoose.Types.ObjectId(videoId)
+            $match: { _id: new mongoose.Types.ObjectId(videoId) }
+        },
+        {
+            $lookup: { from: "subscriptions", localField: "owner", foreignField: "channel", as: "subscribers" }
+        },
+        {
+            $lookup: {
+                from: "subscriptions",
+                let: { videoOwnerId: "$owner" },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$channel", "$$videoOwnerId"] },
+                                    { $eq: ["$subscriber", new mongoose.Types.ObjectId(req.user?._id)] }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                as: "currentUserSubscription"
             }
         },
         {
-            // Get the owner's details from the 'users' collection
             $lookup: {
                 from: "users",
                 localField: "owner",
                 foreignField: "_id",
                 as: "ownerDetails",
                 pipeline: [
-                    {
-                        // Only select the username and avatar from the owner's details
-                        $project: {
-                            username: 1,
-                            avatar: 1
-                        }
-                    }
+                    { $project: { username: 1, avatar: 1 } }
                 ]
             }
         },
+        // --- THIS STAGE IS NOW CORRECTED ---
         {
-            // Clean up the ownerDetails field
             $addFields: {
                 owner: {
-                    $first: "$ownerDetails"
+                    // Merge the fields from ownerDetails with the calculated fields
+                    $mergeObjects: [
+                        { $first: "$ownerDetails" },
+                        {
+                            subscribersCount: { $size: "$subscribers" },
+                            isSubscribed: {
+                                $cond: {
+                                    if: { $gt: [{ $size: "$currentUserSubscription" }, 0] },
+                                    then: true,
+                                    else: false
+                                }
+                            }
+                        }
+                    ]
                 }
+            }
+        },
+        {
+            $project: {
+                ownerDetails: 0,
+                subscribers: 0,
+                currentUserSubscription: 0
             }
         }
     ]);
-    if( video.length === 0){
-        throw new ApiError(404, "video is not found")
+
+    if (video.length === 0) {
+        throw new ApiError(404, "Video not found");
     }
+
     return res
-    .status(200)
-    .json(new ApiResponse(
-        200,
-        video,
-        "Video fatched successfully"
-    ))
-})
+        .status(200)
+        .json(new ApiResponse(200, video[0], "Video fetched successfully"));
+});
+
+
 
 const updateVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params;
