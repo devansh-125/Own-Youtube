@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams , Link} from 'react-router-dom';
 import API from '../services/api.js';
 import './VideoDetail.css';
 import LikeButton from '../components/social/LikeButton.jsx';
@@ -12,18 +12,25 @@ function VideoDetail() {
   const { isLoggedIn } = useAuth();
   const { videoId } = useParams();
   const [video, setVideo] = useState(null);
+  const [upNextVideos, setUpNextVideos] = useState([]);
   const [recommendedVideos, setRecommendedVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         
-        const videoResponse = await API.get(`/videos/${videoId}`);
-        const videoData = videoResponse.data.data;
+        // Fetch both the main video and the "Up Next" list concurrently
+        const [videoResponse, upNextResponse] = await Promise.all([
+          API.get(`/videos/${videoId}`),
+          API.get('/videos') // API call to get all videos
+        ]); 
 
+        // Process main video data
+        const videoData = videoResponse.data.data;
         if (videoData) {
           setVideo(videoData);
           if (isLoggedIn) {
@@ -33,17 +40,16 @@ function VideoDetail() {
           throw new Error("Video not found");
         }
 
-        const recommendedResponse = await API.get('/videos');
-        const videosArray = recommendedResponse.data.data.videos; 
-
-        if (videosArray && Array.isArray(videosArray)) {
-          const filteredVideos = videosArray.filter(v => v._id !== videoId);
-          setRecommendedVideos(filteredVideos);
+        // 2. PROCESS AND SET "UP NEXT" VIDEOS
+        const allVideos = upNextResponse.data.data.videos; 
+        if (allVideos && Array.isArray(allVideos)) {
+          const filteredVideos = allVideos.filter(v => v._id !== videoId);
+          setUpNextVideos(filteredVideos);
         }
 
         setError(null);
       } catch (err) {
-        setError("Failed to fetch video details.");
+        setError("Failed to fetch page data.");
         console.error("API call failed:", err);
       } finally {
         setLoading(false);
@@ -53,6 +59,8 @@ function VideoDetail() {
     if (videoId) {
       fetchData();
     }
+    // Scroll to top when the videoId changes
+    window.scrollTo(0, 0);
   }, [videoId, isLoggedIn]);
 
   // This function updates the parent's state when the child button is clicked
@@ -120,12 +128,31 @@ function VideoDetail() {
       </div>
 
       <div className='secondary-column'>
-        <h2 style={{margin: 0}}>Up Next</h2>
-        {recommendedVideos.map((recVideo) => (
-          <VideoCard key={recVideo._id} video={recVideo} />
-        ))}
+        <h2 style={{margin: 0, marginBottom: '1rem'}}>Up Next</h2>
+         <div className='up-next-list'>
+          {upNextVideos.length > 0 ? (
+            upNextVideos.map((nextVideo) => (
+            <UpNextCard key={nextVideo._id} video={nextVideo} />
+           ))
+          ) : (
+             <p style={{ color: '#aaa', fontSize: '0.9rem' }}>No other videos available.</p>
+          )}
+        </div>
       </div>
     </div>
+  );
+}
+
+function UpNextCard({ video }) {
+  return (
+    <Link to={`/video/${video._id}`} className='up-next-card'>
+      <img src={video.thumbnail} alt={video.title} className='up-next-thumbnail' />
+      <div className='up-next-info'>
+        <h4 className='up-next-title'>{video.title}</h4>
+        <p className='up-next-owner'>{video.owner?.username}</p>
+        <p className='up-next-stats'>{video.views} views</p>
+      </div>
+    </Link>
   );
 }
 

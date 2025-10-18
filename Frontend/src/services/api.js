@@ -14,6 +14,7 @@ export const getUserProfile = () => API.get("/users/me");
 export const changePassword = (data) => API.post("/users/change-password", data);
 export const updateAccount = (data) => API.put("/users/update-account", data);
 
+
 // Videos
 export const uploadVideo = (data) =>
   API.post("/videos/upload", data, {

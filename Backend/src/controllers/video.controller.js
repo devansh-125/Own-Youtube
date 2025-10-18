@@ -8,7 +8,6 @@ import {uploadCloudinary} from "../utils/cloudinary.js"
 import { v2 as cloudinary } from "cloudinary";
 
 
-
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 9, query, sortBy, sortType, userId } = req.query;
 
@@ -197,7 +196,6 @@ const getVideoById = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(200, video[0], "Video fetched successfully"));
 });
-
 
 
 const updateVideo = asyncHandler(async (req, res) => {

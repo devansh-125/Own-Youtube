@@ -11,7 +11,8 @@ import {
     updateAccountDetails,
     updateUserAvatar,
     updateUserCoverImage,
-    addToWatchHistory
+    addToWatchHistory,
+    handleGoogleLoginCallback // 1. Import the new controller function
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyAuth } from "../middlewares/verifyAuth.middleware.js";
@@ -44,11 +45,13 @@ router.route("/history/:videoId").post(verifyAuth, addToWatchHistory);
 // Google OAuth Routes
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: 'http://localhost:5173/login' }),
-  (req, res) => {
-    res.redirect('http://localhost:5173');
-  }
+router.get(
+    '/google/callback',
+    passport.authenticate('google', {
+        failureRedirect: 'http://localhost:5173/login',
+        session: false 
+    }),
+    handleGoogleLoginCallback 
 );
 
 export default router;

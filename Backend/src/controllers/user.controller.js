@@ -583,6 +583,82 @@ const addToWatchHistory = asyncHandler(async (req, res) => {
 });
 
 
+const handleGoogleLoginCallback = asyncHandler(async (req, res) => {
+
+    if (!req.user) {
+        throw new ApiError(401, "Google authentication failed");
+    }
+    const { email, fullName, avatar, googleId } = req.user;
+
+    // Use a 'let' because we might reassign the user variable if we create a new one.
+    let user = await User.findOne({ email });
+
+    if (!user) {
+        try {
+            console.log("New user via Google, uploading avatar to Cloudinary...");
+            const uploadResult = await cloudinary.uploader.upload(avatar, {
+                folder: "avatars",
+                public_id: googleId,
+                overwrite: true,
+                resource_type: "image"
+            });
+
+            user = await User.create({
+                // Use 'fullName' from Google for the name field
+                fullName: fullName, 
+                email: email,
+                avatar: uploadResult.secure_url,
+                googleId: googleId,
+                username: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') // create a clean username
+            });
+        } catch (error) {
+            console.error("!!! CLOUDINARY UPLOAD OR USER CREATION FAILED FOR NEW USER:", error);
+            throw new ApiError(500, "Failed to process new user registration via Google.");
+        }
+
+    } else {
+        if (user.avatar && user.avatar.includes("googleusercontent.com")) {
+            try {
+                console.log("Existing user has a Google avatar, updating to Cloudinary...");
+                const uploadResult = await cloudinary.uploader.upload(avatar, {
+                    folder: "avatars",
+                    public_id: user.googleId || googleId, 
+                    overwrite: true,
+                    resource_type: "image"
+                });
+
+                user.avatar = uploadResult.secure_url;
+                await user.save({ validateBeforeSave: false });
+            } catch (error) {
+                console.error("!!! CLOUDINARY UPLOAD FAILED FOR EXISTING USER:", error);
+                throw new ApiError(500, "Could not update user avatar.");
+            }
+        }
+    }
+    // Refresh the session with the latest user data
+    await new Promise((resolve, reject) => {
+        req.login(user, (err) => {
+            if (err) {
+                return reject(new ApiError(500, "Failed to refresh user session."));
+            }
+            console.log("User session refreshed with latest data.");
+            resolve();
+        });
+    });
+
+    const { accessToken, refreshToken } = await generateAccessTokenAndrefreshToken(user._id);
+
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production'
+    };
+    
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .redirect(process.env.CORS_ORIGIN);
+});
 
 
 export {
@@ -597,5 +673,6 @@ export {
     updateUserCoverImage,
     getUserChannelProfile,
     getwatchHistory,
-    addToWatchHistory
+    addToWatchHistory,
+    handleGoogleLoginCallback
 }
