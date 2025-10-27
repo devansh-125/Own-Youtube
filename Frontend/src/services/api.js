@@ -23,4 +23,8 @@ export const uploadVideo = (data) =>
 
 export const getHistory = () => API.get("/videos/history");
 
+export const getUpNextSuggestions = (channelId, currentVideoId) => {
+    return API.get(`/videos/up-next/${channelId}/${currentVideoId}`);
+};
+
 export default API;

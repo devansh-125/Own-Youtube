@@ -584,68 +584,61 @@ const addToWatchHistory = asyncHandler(async (req, res) => {
 
 
 const handleGoogleLoginCallback = asyncHandler(async (req, res) => {
-
+    // Ensure Google authentication provided a user object.
     if (!req.user) {
         throw new ApiError(401, "Google authentication failed");
     }
-    const { email, fullName, avatar, googleId } = req.user;
 
-    // Use a 'let' because we might reassign the user variable if we create a new one.
+    const { email, fullName, avatar: googleAvatarUrl, googleId } = req.user;
+
+    // Step 1: Find the user in the database and get their current avatar.
     let user = await User.findOne({ email });
+    let finalAvatarUrl = user?.avatar; 
 
-    if (!user) {
+    // Step 2: Determine if the avatar needs to be uploaded to Cloudinary.
+    // This is true for a new user OR an existing user with a temporary Google URL.
+    const needsCloudinaryUpload = !user || (user && user.avatar.includes("googleusercontent.com"));
+
+    if (needsCloudinaryUpload) {
         try {
-            console.log("New user via Google, uploading avatar to Cloudinary...");
-            const uploadResult = await cloudinary.uploader.upload(avatar, {
+            const uploadResult = await cloudinary.uploader.upload(googleAvatarUrl, {
                 folder: "avatars",
-                public_id: googleId,
+                public_id: user?.googleId || googleId,
                 overwrite: true,
                 resource_type: "image"
             });
-
-            user = await User.create({
-                // Use 'fullName' from Google for the name field
-                fullName: fullName, 
-                email: email,
-                avatar: uploadResult.secure_url,
-                googleId: googleId,
-                username: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') // create a clean username
-            });
+            finalAvatarUrl = uploadResult.secure_url; // Set the definitive URL for the database.
         } catch (error) {
-            console.error("!!! CLOUDINARY UPLOAD OR USER CREATION FAILED FOR NEW USER:", error);
-            throw new ApiError(500, "Failed to process new user registration via Google.");
-        }
-
-    } else {
-        if (user.avatar && user.avatar.includes("googleusercontent.com")) {
-            try {
-                console.log("Existing user has a Google avatar, updating to Cloudinary...");
-                const uploadResult = await cloudinary.uploader.upload(avatar, {
-                    folder: "avatars",
-                    public_id: user.googleId || googleId, 
-                    overwrite: true,
-                    resource_type: "image"
-                });
-
-                user.avatar = uploadResult.secure_url;
-                await user.save({ validateBeforeSave: false });
-            } catch (error) {
-                console.error("!!! CLOUDINARY UPLOAD FAILED FOR EXISTING USER:", error);
-                throw new ApiError(500, "Could not update user avatar.");
-            }
+            console.error("!!! CLOUDINARY UPLOAD FAILED:", error);
+            throw new ApiError(500, "Failed to upload avatar to Cloudinary.");
         }
     }
-    // Refresh the session with the latest user data
+
+    // Step 3: Create a new user or update an existing one if the avatar has changed.
+    if (!user) {
+        // Create a new user record if they don't exist.
+        user = await User.create({
+            fullName, 
+            email,
+            avatar: finalAvatarUrl,
+            googleId,
+            username: email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '')
+        });
+    } else if (user.avatar !== finalAvatarUrl) {
+        // Update the existing user's avatar only if it's different.
+        user.avatar = finalAvatarUrl;
+        await user.save({ validateBeforeSave: false });
+    }
+
+    // Step 4: Unconditionally refresh the session to prevent the frontend from receiving stale data.
     await new Promise((resolve, reject) => {
         req.login(user, (err) => {
-            if (err) {
-                return reject(new ApiError(500, "Failed to refresh user session."));
-            }
-            console.log("User session refreshed with latest data.");
+            if (err) return reject(new ApiError(500, "Failed to refresh user session."));
             resolve();
         });
     });
-
+    
+    // Step 5: Generate tokens, set them in secure cookies, and redirect to the frontend.
     const { accessToken, refreshToken } = await generateAccessTokenAndrefreshToken(user._id);
 
     const options = {
@@ -659,7 +652,6 @@ const handleGoogleLoginCallback = asyncHandler(async (req, res) => {
       .cookie("refreshToken", refreshToken, options)
       .redirect(process.env.CORS_ORIGIN);
 });
-
 
 export {
     registerUser,

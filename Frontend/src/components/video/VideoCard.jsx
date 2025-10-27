@@ -59,7 +59,7 @@ function VideoCard({ video, onProfilePage = false }) {
     };
 
     return (
-        // The Link is now the main container with the hover effects
+        
         <Link 
             to={`/video/${video._id}`} 
             className='video-card'

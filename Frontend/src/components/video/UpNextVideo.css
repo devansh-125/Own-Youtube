@@ -1,0 +1,26 @@
+
+.up-next-container {
+    /* This component will take the width from its parent 
+       (the .sidebar-content div in VideoDetail.jsx) */
+    width: 100%;
+}
+
+.up-next-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f1f1f1;
+    margin-bottom: 16px;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* These styles are for the loading/empty text */
+.up-next-container p {
+    font-size: 14px;
+    color: #aaa;
+    padding: 10px;
+    text-align: center;
+}

@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import CommentList from '../components/social/CommentList.jsx';
 import SubscribeButton from '../components/social/SubscribeButton.jsx';
 import VideoCard from '../components/video/VideoCard.jsx'; 
+import UpNextVideos from '../components/video/UpNextVideo.jsx';
 
 function VideoDetail() {
   const { isLoggedIn } = useAuth();
@@ -127,33 +128,17 @@ function VideoDetail() {
          <CommentList videoId={videoId} />
       </div>
 
-      <div className='secondary-column'>
-        <h2 style={{margin: 0, marginBottom: '1rem'}}>Up Next</h2>
-         <div className='up-next-list'>
-          {upNextVideos.length > 0 ? (
-            upNextVideos.map((nextVideo) => (
-            <UpNextCard key={nextVideo._id} video={nextVideo} />
-           ))
-          ) : (
-             <p style={{ color: '#aaa', fontSize: '0.9rem' }}>No other videos available.</p>
-          )}
-        </div>
-      </div>
+      <div className="sidebar-content">
+                <UpNextVideos 
+                    currentVideoId={video._id} 
+                    channelId={video.owner?._id} 
+                />
+            </div>
+
+     
     </div>
   );
 }
 
-function UpNextCard({ video }) {
-  return (
-    <Link to={`/video/${video._id}`} className='up-next-card'>
-      <img src={video.thumbnail} alt={video.title} className='up-next-thumbnail' />
-      <div className='up-next-info'>
-        <h4 className='up-next-title'>{video.title}</h4>
-        <p className='up-next-owner'>{video.owner?.username}</p>
-        <p className='up-next-stats'>{video.views} views</p>
-      </div>
-    </Link>
-  );
-}
 
 export default VideoDetail;

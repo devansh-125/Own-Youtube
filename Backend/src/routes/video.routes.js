@@ -6,6 +6,7 @@ import {
     updateVideo,
     deleteVideo,
     togglePublishStatus,
+    getUpNextVideos
 } from "../controllers/video.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
@@ -15,6 +16,7 @@ const router = Router();
 
 // These routes are public and can be accessed by anyone.
 router.route("/").get(getAllVideos);
+router.route("/up-next/:channelId/:currentVideoId").get(getUpNextVideos);
 router.route("/:videoId").get(getVideoById);
 
 router.use(verifyAuth);

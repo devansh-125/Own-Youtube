@@ -320,11 +320,116 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
 });
 
 
+const getUpNextVideos = asyncHandler(async (req, res) => {
+    const { channelId, currentVideoId } = req.params;
+    const limit = 15; 
+
+    if (!mongoose.isValidObjectId(channelId) || !mongoose.isValidObjectId(currentVideoId)) {
+        throw new ApiError(400, "Invalid channel or video ID");
+    }
+
+    const channelVideos = await Video.aggregate([
+        {
+            // 1. Find matching videos (same as Video.find)
+            $match: {
+                owner: new mongoose.Types.ObjectId(channelId),
+                _id: { $ne: new mongoose.Types.ObjectId(currentVideoId) },
+                isPublished: true,
+            }
+        },
+        {
+            // 2. Sort them
+            $sort: { createdAt: -1 }
+        },
+        {
+            // 3. This is the safe version of .populate()
+            $lookup: {
+                from: "users", // The name of your users collection
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner", // Put the result in a field named 'owner'
+                pipeline: [
+                    // Only select the fields we want from the user
+                    { $project: { username: 1, avatar: 1 } }
+                ]
+            }
+        },
+        {
+            // If the 'owner' array is empty (user not found), 
+            // $unwind will *discard the entire video* instead of crashing.
+            $unwind: "$owner"
+        }
+    ]);
+
+    // 2. Determine how many more videos we need
+    const remainingLimit = limit - channelVideos.length;
+
+    let generalVideos = [];
+
+    // 3. If we still need more videos, fetch popular ones
+    if (remainingLimit > 0) {
+        
+        // Create a list of IDs to exclude
+        const excludeIds = [
+            new mongoose.Types.ObjectId(currentVideoId),
+            ...channelVideos.map(video => video._id) // these are already ObjectIds from aggregate
+        ];
+
+        generalVideos = await Video.aggregate([
+            {
+                // 1. Find videos not in the exclude list
+                $match: {
+                    _id: { $nin: excludeIds },
+                    isPublished: true,
+                }
+            },
+            {
+                // 2. Sort by most popular
+                $sort: { views: -1, createdAt: -1 }
+            },
+            {
+                // 3. Limit to only what we need
+                $limit: remainingLimit
+            },
+            {
+                // 4. Same safe populate
+                $lookup: {
+                    from: "users",
+                    localField: "owner",
+                    foreignField: "_id",
+                    as: "owner",
+                    pipeline: [
+                        { $project: { username: 1, avatar: 1 } }
+                    ]
+                }
+            },
+            {
+                // 5. Same safe unwind
+                $unwind: "$owner"
+            }
+        ]);
+    }
+
+    // 4. Combine the two lists
+    const upNextPlaylist = [...channelVideos, ...generalVideos];
+
+    if (upNextPlaylist.length === 0) {
+        return res
+            .status(200)
+            .json(new ApiResponse(200, [], "No other videos available"));
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, upNextPlaylist, "Up next playlist fetched successfully"));
+});
+
 export {
     getAllVideos,
     publishAVideo,
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    getUpNextVideos
 }
