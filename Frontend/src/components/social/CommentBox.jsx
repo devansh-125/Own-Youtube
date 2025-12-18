@@ -65,10 +65,6 @@ function CommentBox({ comment, onCommentDeleted, onCommentUpdated }) {
             setIsLiked(originalIsLiked);
         }
     };
-
-    const handleCommentChange = (text) => {
-        setNewComment(text);
-    };
     
     if (!comment || !comment.owner) return null;
 
@@ -122,12 +118,17 @@ function CommentBox({ comment, onCommentDeleted, onCommentUpdated }) {
                                 onClick={handleToggleLike}
                             >
                                 <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
+                                    <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path>
                                 </svg>
                             </button>
                             {localLikeCount > 0 && (
                                 <span className="like-count">{localLikeCount}</span>
                             )}
+                            <button className="dislike-button">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L8.83 23l6.59-6.59c.37-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"></path>
+                                </svg>
+                            </button>
                         </div>
                     </>
                 )}

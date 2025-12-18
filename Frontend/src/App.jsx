@@ -13,7 +13,7 @@ function App() {
     <>
       <Navbar />
       <div className='app-container'>
-        {!isVideoPage && <Sidebar />}
+        <Sidebar mini={isVideoPage} />
         <main className='main-content'>
           <Outlet />
         </main>

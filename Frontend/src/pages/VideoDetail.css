@@ -1,7 +1,7 @@
 .video-detail-page {
     display: flex;
     gap: 24px;
-    padding: 24px 72px;
+    padding: 24px 24px 24px 0; /* Reduced left padding since sidebar is there */
     background-color: var(--bg-color);
     color: var(--text-color);
     min-height: calc(100vh - 56px);

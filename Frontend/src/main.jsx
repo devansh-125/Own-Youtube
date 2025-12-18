@@ -16,6 +16,7 @@ import Profile from './pages/Profile.jsx'
 import UploadVideo from './pages/UploadVideo.jsx'
 import EditVideo from './pages/EditVideo.jsx'
 import LikedVideos from './pages/LikedVideos.jsx';
+import Shorts from './pages/Shorts.jsx';
 
 
 const router = createBrowserRouter([
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: 'upload-video', element: <UploadVideo /> },
       { path : 'edit-video/:videoId', element: <EditVideo /> },
       { path: 'liked-videos', element: <LikedVideos /> },
+      { path: 'shorts', element: <Shorts /> },
      
     ]
   }

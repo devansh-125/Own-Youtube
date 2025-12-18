@@ -116,19 +116,14 @@ function VideoDetail() {
           <div className='action-buttons'>
             <LikeButton video={video} /> 
             <button className='action-pill' onClick={handleShare}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-small">
-                <path d="m15 10 5 5-5 5"></path>
-                <path d="M4 4v7a4 4 0 0 0 4 4h12"></path>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="icon-small">
+                <path d="M15,5.63L20.66,12L15,18.37V14h-1c-3.96,0-7.14,2.4-8.4,6.12C6.12,15.33,9.76,12,14,12h1V5.63 M14,3v9c-4.97,0-9,4.03-9,9 c0-0.55,0.04-1.09,0.11-1.62C5.82,15.18,8.53,12,12,12h2v9l9-9L14,3L14,3z"></path>
               </svg>
               Share
             </button>
             <button className='action-pill'>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-small">
-                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
-                <path d="M5 3v4"></path>
-                <path d="M19 17v4"></path>
-                <path d="M3 5h4"></path>
-                <path d="M17 19h4"></path>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="icon-small">
+                <path d="M12,2L14.5,9.5L22,12L14.5,14.5L12,22L9.5,14.5L2,12L9.5,9.5L12,2M12,5.5L10.7,9.3L6.9,10.6L10.7,11.9L12,15.7L13.3,11.9L17.1,10.6L13.3,9.3L12,5.5M7,4L8,6.5L10.5,7.5L8,8.5L7,11L6,8.5L3.5,7.5L6,6.5L7,4M18,13L19,15.5L21.5,16.5L19,17.5L18,20L17,17.5L14.5,16.5L17,15.5L18,13Z"></path>
               </svg>
               Ask AI
             </button>

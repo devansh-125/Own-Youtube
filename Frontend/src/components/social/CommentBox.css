@@ -54,30 +54,37 @@
     margin-top: 8px;
 }
 
-.like-button {
+.like-button, .dislike-button {
     background: none;
     border: none;
-    color: var(--text-secondary); /* Default color for the heart icon */
+    color: var(--text-color);
     cursor: pointer;
-    padding: 4px;
+    padding: 8px;
     display: flex;
     align-items: center;
     border-radius: 50%;
+    transition: background-color 0.2s;
 }
 
-.like-button svg {
+.like-button:hover, .dislike-button:hover {
+    background-color: var(--hover-bg);
+}
+
+.like-button svg, .dislike-button svg {
     width: 20px;
     height: 20px;
 }
 
 /* Style for when the comment is liked */
 .like-button.active {
-    color: #ff4d4d; /* A vibrant red color when active */
+    color: var(--accent-color);
 }
 
 .like-count {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
+    margin-left: -4px;
+    margin-right: 4px;
 }
 /* ------------------------------------------- */
 
