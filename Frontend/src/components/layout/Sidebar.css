@@ -16,7 +16,7 @@
 .sidebar-link {
     display: flex;
     align-items: center;
-    padding: 12px 24px;
+    padding: 12px 12px;
     color: white;
     text-decoration: none;
     font-size: 1rem;
@@ -43,5 +43,5 @@
 body {
     background-color: black; /* Dark background to see the border clearly */
     margin: 0;
-    padding: 20px; /* Add some space around the sidebar */
+    padding: 5px; /* Add some space around the sidebar */
 }

@@ -10,6 +10,7 @@ function CommentList({ videoId }) {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [loading, setLoading] = useState(true);
+    const [isInputFocused, setIsInputFocused] = useState(false);
 
     const fetchComments = async () => {
         try {
@@ -56,32 +57,49 @@ function CommentList({ videoId }) {
     const handleCommentChange = (text) => {
         setNewComment(text);
     };
-    // -----------------------
+
+    const handleCancel = () => {
+        setNewComment("");
+        setIsInputFocused(false);
+    };
 
     return (
         <div className="comment-section">
             <h2 className="comment-count">{comments.length} Comments</h2>
             
             {isLoggedIn && (
-                <form onSubmit={handleCommentSubmit} className="add-comment-form">
+                <div className="add-comment-container">
                     <img src={authUser?.avatar} alt="Your avatar" className="comment-avatar" />
                     
-                    <EmojiInput
-                        as="textarea"
-                        value={newComment}
-                        onChange={handleCommentChange} // Pass the new handler function
-                        placeholder="Add a comment..."
-                        theme="dark"
-                    />
-                    
-                    <button 
-                        type="submit" 
-                        className="comment-submit-btn"
-                        disabled={!newComment.trim()}
-                    >
-                        Comment
-                    </button>
-                </form>
+                    <form onSubmit={handleCommentSubmit} className="add-comment-form">
+                        <EmojiInput
+                            as="textarea"
+                            value={newComment}
+                            onChange={handleCommentChange}
+                            placeholder="Add a comment..."
+                            theme="dark"
+                            onFocus={() => setIsInputFocused(true)}
+                            actions={(isInputFocused || newComment.trim()) && (
+                                <div className="comment-form-actions">
+                                    <button 
+                                        type="button" 
+                                        className="comment-cancel-btn"
+                                        onClick={handleCancel}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button 
+                                        type="submit" 
+                                        className="comment-submit-btn"
+                                        disabled={!newComment.trim()}
+                                    >
+                                        Comment
+                                    </button>
+                                </div>
+                            )}
+                        />
+                    </form>
+                </div>
             )}
 
             <div className="comment-list">

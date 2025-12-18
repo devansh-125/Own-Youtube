@@ -11,6 +11,7 @@ function Profile() {
     const navigate = useNavigate();
     const [channelData, setChannelData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState('videos');
 
     useEffect(() => {
         if (authUser?.username) {
@@ -43,27 +44,61 @@ function Profile() {
         return <div className='status-message error'>Could not load your channel data.</div>;
     }
 
+    const tabs = [
+        { id: 'home', label: 'Home' },
+        { id: 'videos', label: 'Videos' },
+        { id: 'shorts', label: 'Shorts' },
+        { id: 'playlists', label: 'Playlists' },
+        { id: 'community', label: 'Community' },
+    ];
+
     return (
         <div className='profile-page'>
-             <div className='profile-header-wrapper'> 
-            <ProfileCard channel={channelData} />
+            <div className='profile-header-wrapper'> 
+                <ProfileCard channel={channelData} />
             </div>
             
-            <hr className='separator' />
+            <div className='profile-tabs-container'>
+                {tabs.map(tab => (
+                    <button 
+                        key={tab.id}
+                        className={`profile-tab ${activeTab === tab.id ? 'active' : ''}`}
+                        onClick={() => setActiveTab(tab.id)}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
+            </div>
 
-            <div className='profile-videos-grid'>
-                <h2>Uploaded Videos</h2>
-                {channelData.videos?.length > 0 ? (
-                    <div className='video-grid'>
-                        {channelData.videos.map(video => (
-                            <VideoCard key={video._id} video={video} onProfilePage={true} />
-                        ))}
+            <div className='profile-content-section'>
+                {activeTab === 'videos' && (
+                    <div className='profile-videos-grid'>
+                        {channelData.videos?.length > 0 ? (
+                            <div className='video-grid'>
+                                {channelData.videos.map(video => (
+                                    <VideoCard key={video._id} video={video} onProfilePage={true} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className='empty-videos-state'>
+                                <div className='empty-state-icon'>
+                                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                                        <path d="M10 8l6 4-6 4V8zm11-5v18H3V3h18zm-1 1H4v16h16V4z"/>
+                                    </svg>
+                                </div>
+                                <h3>No content available</h3>
+                                <p>Start sharing your story with the world. Click the button below to upload your first video.</p>
+                                <button className='yt-action-btn primary' onClick={() => navigate('/upload-video')}>
+                                    Upload video
+                                </button>
+                            </div>
+                        )}
                     </div>
-                ) : (
+                )}
+                
+                {activeTab !== 'videos' && (
                     <div className='empty-videos-state'>
-                        <div className='empty-state-icon'>📝</div>
-                        <h3>No content available</h3>
-                        <p>Start sharing your story with the world. Click the button below to upload your first video.</p>
+                        <h3>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} section is empty</h3>
                     </div>
                 )}
             </div>

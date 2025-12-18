@@ -1,41 +1,26 @@
-.subscription-container {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.subscriber-count {
-    color: #aaa;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
 .subscribe-btn {
     border: none;
     border-radius: 20px;
-    padding: 10px 20px;
-    font-weight: bold;
-    font-size: 1rem;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-/* Default state: not subscribed */
-.subscribe-btn {
-    background-color: #ae7aff;
-    color: white;
+    transition: background-color 0.2s ease;
+    background-color: #ffffff;
+    color: #0f0f0f;
 }
 
 .subscribe-btn:hover {
-    background-color: #9960e6;
+    background-color: #e5e5e5;
 }
 
-/* Subscribed state: muted colors */
+/* Subscribed state: grey background, white text */
 .subscribe-btn.subscribed {
-    background-color: #3f3f3f;
-    color: #aaa;
+    background-color: #272727;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .subscribe-btn.subscribed:hover {
-    background-color: #4f4f4f;
+    background-color: #3f3f3f;
 }

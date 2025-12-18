@@ -1,33 +1,46 @@
 .like-dislike-container {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 36px;
 }
 
 .like-btn, .dislike-btn {
-    background-color: #272727;
-    color: white;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    background: transparent;
+    color: #ffffff;
     border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
     cursor: pointer;
     font-weight: 500;
-    outline: none; /* Removes the click outline */
-    
-    /* --- ANIMATION & SHADOW --- */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.2s, transform 0.1s;
+    font-size: 0.9rem;
+    height: 100%;
+    transition: background-color 0.2s ease;
 }
 
 .like-btn:hover, .dislike-btn:hover {
-    background-color: #3f3f3f;
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* This style applies ONLY while the mouse button is held down */
-.like-btn:active, .dislike-btn:active {
-    transform: scale(0.95); /* Shrinks the button for a "press" effect */
+.separator-vertical {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .like-btn.active, .dislike-btn.active {
-    background-color: #3ea6ff;
-    color: white;
+    color: #ffffff;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.count {
+    margin-left: 2px;
 }

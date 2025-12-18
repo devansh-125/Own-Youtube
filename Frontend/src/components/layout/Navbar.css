@@ -116,17 +116,15 @@
 }
 
 .nav-avatar {
-    width: 40px;
-    min-width: 40px; /* This is a key fix: prevents it from growing larger */
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     cursor: pointer;
     margin-left: 10px;
-    object-fit: cover; /* This ensures the image inside is scaled correctly */
-    border: 2px solid transparent;
-    transition: border-color 0.2s;
+    object-fit: cover;
+    display: block;
 }
 
 .nav-avatar:hover {
-    border-color: #3ea6ff;
+    opacity: 0.9;
 }

@@ -1,76 +1,130 @@
-/* This wrapper makes the component's styles independent, so they
-  don't rely on the parent page.
-*/
-.profile-card-wrapper .profile-header {
-  position: relative;
+.profile-card-wrapper {
   width: 100%;
-  color: white;
+  background-color: #0f0f0f;
+}
+
+.channel-banner-container {
+  width: 100%;
+  aspect-ratio: 6 / 1;
+  overflow: hidden;
   border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.channel-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.channel-header-content {
+  display: flex;
+  gap: 24px;
+  padding: 0 16px;
   margin-bottom: 24px;
 }
 
-.profile-card-wrapper .cover-image {
-  display: block;
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-}
-
-.profile-card-wrapper .profile-details {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 16px 24px;
-  box-sizing: border-box;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
-  display: flex;
-  align-items: flex-end;
-  gap: 20px;
-}
-
-.profile-card-wrapper .profile-avatar-page {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 4px solid #121212;
-  object-fit: cover;
-  margin-bottom: -16px;
+.channel-avatar-container {
   flex-shrink: 0;
 }
 
-.profile-card-wrapper .profile-text {
-  flex-grow: 1;
-  padding-bottom: 10px;
+.channel-avatar-large {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.profile-card-wrapper .profile-text h1 {
+.channel-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.channel-name-large {
+  font-size: 2.25rem;
+  font-weight: 700;
   margin: 0;
-  font-size: 2.5rem;
-  font-weight: bold;
+  color: #ffffff;
 }
 
-.profile-card-wrapper .profile-text p {
-  margin: 4px 0 0 0;
-  color: #ddd;
+.channel-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #aaaaaa;
+  font-size: 0.9rem;
 }
 
-.profile-card-wrapper .profile-actions {
-  padding-bottom: 10px;
+.dot-separator {
+  margin: 0 2px;
 }
 
-.profile-card-wrapper .upload-video-btn-profile {
-  background-color: #ae7aff;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 1rem;
+.channel-description-snippet {
+  color: #aaaaaa;
+  font-size: 0.9rem;
+  margin: 4px 0;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.profile-card-wrapper .upload-video-btn-profile:hover {
-  background-color: #9960e6;
+.channel-action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.yt-action-btn {
+  padding: 0 16px;
+  height: 36px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.yt-action-btn.primary {
+  background-color: #ffffff;
+  color: #0f0f0f;
+}
+
+.yt-action-btn.primary:hover {
+  background-color: #e5e5e5;
+}
+
+.yt-action-btn.secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.yt-action-btn.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+  .channel-header-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .channel-avatar-large {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .channel-name-large {
+    font-size: 1.75rem;
+  }
+  
+  .channel-meta-info {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .channel-action-buttons {
+    justify-content: center;
+  }
 }

@@ -51,15 +51,12 @@ function SubscribeButton({ channel, onSubscriptionChange }) {
     }
 
     return (
-        <div className="subscription-container">
-            <span className="subscriber-count">{subscribersCount} Subscribers</span>
-            <button
-                className={`subscribe-btn ${isSubscribed ? 'subscribed' : ''}`}
-                onClick={handleToggleSubscription}
-            >
-                {isSubscribed ? 'Subscribed' : 'Subscribe'}
-            </button>
-        </div>
+        <button
+            className={`subscribe-btn ${isSubscribed ? 'subscribed' : ''}`}
+            onClick={handleToggleSubscription}
+        >
+            {isSubscribed ? 'Subscribed' : 'Subscribe'}
+        </button>
     );
 }
 

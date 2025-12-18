@@ -1,0 +1,118 @@
+.share-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.share-modal-content {
+    background-color: #212121;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    padding: 24px;
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.share-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.share-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.share-options-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    scrollbar-width: thin;
+    scrollbar-color: #3f3f3f transparent;
+}
+
+.share-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #aaa;
+    font-size: 0.75rem;
+    min-width: 60px;
+}
+
+.share-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #3f3f3f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.share-option:hover .share-icon-wrapper {
+    background-color: #4f4f4f;
+}
+
+.share-icon-wrapper img {
+    width: 24px;
+    height: 24px;
+}
+
+.share-link-section {
+    display: flex;
+    background-color: #0f0f0f;
+    border: 1px solid #3f3f3f;
+    border-radius: 8px;
+    padding: 4px;
+    align-items: center;
+}
+
+.share-link-section input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.share-link-section button {
+    background-color: #3ea6ff;
+    color: #0f0f0f;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.share-link-section button:hover {
+    background-color: #65b8ff;
+}

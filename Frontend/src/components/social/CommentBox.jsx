@@ -87,16 +87,31 @@ function CommentBox({ comment, onCommentDeleted, onCommentUpdated }) {
 
                 {isEditing ? (
                     <form onSubmit={handleUpdate} className="edit-comment-form">
-                        
                         <EmojiInput
                             as="textarea"
                             value={editText}
                             onChange={(text) => setEditText(text)}
                             className="edit-comment-input"
                             autoFocus
+                            actions={
+                                <div className="comment-form-actions">
+                                    <button 
+                                        type="button" 
+                                        className="comment-cancel-btn"
+                                        onClick={() => setIsEditing(false)}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button 
+                                        type="submit" 
+                                        className="comment-submit-btn"
+                                        disabled={!editText.trim()}
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            }
                         />
-                        <button type="submit" className="save-btn">Save</button>
-                        <button type="button" onClick={() => setIsEditing(false)} className="cancel-btn">Cancel</button>
                     </form>
                 ) : (
                     <>

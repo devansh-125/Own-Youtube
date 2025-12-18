@@ -1,114 +1,130 @@
 .video-detail-page {
     display: flex;
     gap: 24px;
-    padding: 24px;
-    max-width: 1700px;
-    margin: 0 auto;
+    padding: 24px 72px;
+    background-color: #0f0f0f;
+    color: #ffffff;
+    min-height: calc(100vh - 56px);
 }
 
 .primary-column {
-    flex: 2;
+    flex: 1;
+    max-width: 1280px;
     min-width: 0;
 }
 
-.secondary-column {
-    flex: 1;
-}
-
 .video-player-wrapper {
-    position: relative;
     width: 100%;
-    padding-bottom: 56.25%;
-    background-color: #000;
-    margin-bottom: 1rem;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
 }
 
 .video-player {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    border-radius: 12px;
-}
-
-.video-info-container {
-    margin-bottom: 1rem;
 }
 
 .video-title-detail {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.4;
 }
 
-.video-metadata-actions {
+.video-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #aaa;
-    font-size: 0.9rem;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.video-stats {
-    display: flex;
-    gap: 8px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.action-btn-placeholder {
-    background-color: #272727;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 500;
-}
-
-.separator {
-    border: none;
-    height: 1px;
-    background-color: black;
-    margin: 1.5rem 0;
-}
-
-.channel-info-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.channel-details {
+.channel-info-section {
     display: flex;
     align-items: center;
+    gap: 12px;
 }
 
 .channel-avatar-detail {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
+    object-fit: cover;
+}
+
+.channel-text {
+    display: flex;
+    flex-direction: column;
     margin-right: 12px;
 }
 
 .channel-name-detail {
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
 }
 
-.subscribe-btn {
-    background-color: #f1f1f1;
-    color: #0f0f0f;
+.sub-count {
+    font-size: 0.75rem;
+    color: #aaaaaa;
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* YouTube-style pill action buttons (Like / Dislike / Share / Save / Ask) */
+.action-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 16px;
+    height: 36px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.action-pill:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.icon-small {
+    width: 18px;
+    height: 18px;
+}
+
+.video-description-box {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.video-stats-inner {
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    gap: 12px;
+}
+
+.sidebar-content {
+    width: 400px;
+    flex-shrink: 0;
 }
 
 .status-message {
@@ -123,12 +139,26 @@
     color: #ff4d4d;
 }
 
-.video-description-box {
-    background-color: #272727;
-    padding: 1rem;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
+@media (max-width: 1200px) {
+    .video-detail-page {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 1012px) {
+    .video-detail-page {
+        flex-direction: column;
+        padding: 0;
+    }
+    .sidebar-content {
+        width: 100%;
+        padding: 12px;
+    }
+    .video-player-wrapper {
+        border-radius: 0;
+    }
+    .video-title-detail, .video-header-row, .video-description-box {
+        padding: 0 12px;
+    }
 }
 
