@@ -94,8 +94,14 @@ function VideoCard({ video, onProfilePage = false }) {
                         </button>
                         {showMenu && (
                             <div className="options-menu">
-                                <button onClick={handleEdit}>Edit</button>
-                                <button onClick={handleDelete} className="delete-option">Delete</button>
+                                <button onClick={handleEdit}>
+                                    <svg viewBox="0 0 24 24" fill="currentColor" style={{width: '20px', height: '20px', marginRight: '12px'}}><path d="M3,17.25V21h3.75L17.81,9.94l-3.75-3.75L3,17.25z M20.71,7.04c0.39-0.39,0.39-1.02,0-1.41l-2.34-2.34c-0.39-0.39-1.02-0.39-1.41,0 l-1.83,1.83l3.75,3.75L20.71,7.04z"/></svg>
+                                    Edit
+                                </button>
+                                <button onClick={handleDelete} className="delete-option">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" style={{width: '20px', height: '20px', marginRight: '12px'}}><path d="M6,19c0,1.1,0.9,2,2,2h8c1.1,0,2-0.9,2-2V7H6V19z M19,4h-3.5l-1-1h-5l-1,1H5v2h14V4z"/></svg>
+                                    Delete
+                                </button>
                             </div>
                         )}
                     </div>

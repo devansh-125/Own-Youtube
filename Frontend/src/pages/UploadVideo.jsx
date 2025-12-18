@@ -4,7 +4,7 @@ import API from '../services/api.js';
 import './UploadVideo.css';
 import EmojiInput from '../components/common/EmojiInput.jsx';
 
-function UploadVideo() {
+function UploadVideo({ isShort = false }) {
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -16,8 +16,8 @@ function UploadVideo() {
 
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
-        if (!title || !description || !videoFile || !thumbnail) {
-            setError('All fields are required.');
+        if (!title || !videoFile || (!isShort && (!description || !thumbnail))) {
+            setError('Please fill in all required fields.');
             setStep(1);
             return;
         }
@@ -27,9 +27,15 @@ function UploadVideo() {
 
         const formData = new FormData();
         formData.append('title', title);
-        formData.append('discription', description); 
+        formData.append('discription', isShort ? (description || 'Short video') : description); 
         formData.append('videoFile', videoFile);
-        formData.append('thumbnail', thumbnail);
+        // For shorts, we can use a default thumbnail or the first frame if not provided
+        if (thumbnail) {
+            formData.append('thumbnail', thumbnail);
+        } else if (isShort) {
+            // In a real app, you'd generate this. For now, we'll require it or use a placeholder
+            formData.append('thumbnail', 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg');
+        }
 
         try {
             await API.post('/videos', formData, {
@@ -37,7 +43,7 @@ function UploadVideo() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            navigate('/profile');
+            navigate(isShort ? '/shorts' : '/profile');
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Upload failed. Please try again.';
             setError(errorMessage);
@@ -78,66 +84,70 @@ function UploadVideo() {
 
                 <div className='upload-modal-content'>
                     {step === 1 ? (
-                        <div className='details-step'>
+                        <div className={`details-step ${isShort ? 'short-mode' : ''}`}>
                             <div className='details-left'>
                                 <div className='input-section'>
                                     <label>Title (required)</label>
                                     <EmojiInput
                                         value={title}
                                         onChange={setTitle}
-                                        placeholder="Add a title that describes your video"
+                                        placeholder={isShort ? "Add a title to your Short" : "Add a title that describes your video"}
                                         theme="dark"
                                         className="yt-input-wrapper"
                                     />
                                 </div>
 
-                                <div className='input-section'>
-                                    <label>Description</label>
-                                    <EmojiInput
-                                        as="textarea"
-                                        value={description}
-                                        onChange={setDescription}
-                                        placeholder="Tell viewers about your video"
-                                        theme="dark"
-                                        className="yt-input-wrapper textarea"
-                                    />
-                                </div>
-
-                                <div className='thumbnail-section'>
-                                    <label>Thumbnail</label>
-                                    <p className='sub-label'>Select or upload a picture that shows what's in your video.</p>
-                                    <div className='thumbnail-upload-box'>
-                                        <input 
-                                            type='file' 
-                                            id='thumbnail' 
-                                            accept='image/*' 
-                                            onChange={(e) => handleFileChange(e, 'thumbnail')} 
-                                            hidden
+                                {!isShort && (
+                                    <div className='input-section'>
+                                        <label>Description</label>
+                                        <EmojiInput
+                                            as="textarea"
+                                            value={description}
+                                            onChange={setDescription}
+                                            placeholder="Tell viewers about your video"
+                                            theme="dark"
+                                            className="yt-input-wrapper textarea"
                                         />
-                                        <label htmlFor='thumbnail' className='thumbnail-label'>
-                                            {thumbnail ? (
-                                                <img src={URL.createObjectURL(thumbnail)} alt="Preview" className='thumb-preview' />
-                                            ) : (
-                                                <div className='upload-placeholder'>
-                                                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                                                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                                                    </svg>
-                                                    <span>Upload thumbnail</span>
-                                                </div>
-                                            )}
-                                        </label>
                                     </div>
-                                </div>
+                                )}
+
+                                {!isShort && (
+                                    <div className='thumbnail-section'>
+                                        <label>Thumbnail</label>
+                                        <p className='sub-label'>Select or upload a picture that shows what's in your video.</p>
+                                        <div className='thumbnail-upload-box'>
+                                            <input 
+                                                type='file' 
+                                                id='thumbnail' 
+                                                accept='image/*' 
+                                                onChange={(e) => handleFileChange(e, 'thumbnail')} 
+                                                hidden
+                                            />
+                                            <label htmlFor='thumbnail' className='thumbnail-label'>
+                                                {thumbnail ? (
+                                                    <img src={URL.createObjectURL(thumbnail)} alt="Preview" className='thumb-preview' />
+                                                ) : (
+                                                    <div className='upload-placeholder'>
+                                                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                                        </svg>
+                                                        <span>Upload thumbnail</span>
+                                                    </div>
+                                                )}
+                                            </label>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <div className='details-right'>
-                                <div className='video-preview-card'>
+                                <div className={`video-preview-card ${isShort ? 'short-preview' : ''}`}>
                                     <div className='preview-display'>
                                         {videoFile ? (
                                             <video src={URL.createObjectURL(videoFile)} className='preview-video' />
                                         ) : (
                                             <div className='preview-placeholder'>
-                                                <span>Video preview will appear here</span>
+                                                <span>{isShort ? 'Short preview will appear here' : 'Video preview will appear here'}</span>
                                             </div>
                                         )}
                                     </div>
@@ -162,7 +172,7 @@ function UploadVideo() {
                                         hidden
                                     />
                                     <label htmlFor='videoFile' className='yt-action-btn secondary full-width'>
-                                        {videoFile ? 'Change Video' : 'Select Video File'}
+                                        {videoFile ? 'Change Video' : (isShort ? 'Select Short (9:16)' : 'Select Video File')}
                                     </label>
                                 </div>
                             </div>

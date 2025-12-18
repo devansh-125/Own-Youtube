@@ -31,6 +31,7 @@ const router = createBrowserRouter([
       { path: 'video/:videoId', element: <VideoDetail /> },
       { path: 'profile', element: <Profile /> },
       { path: 'upload-video', element: <UploadVideo /> },
+      { path: 'upload-short', element: <UploadVideo isShort={true} /> },
       { path : 'edit-video/:videoId', element: <EditVideo /> },
       { path: 'liked-videos', element: <LikedVideos /> },
       { path: 'shorts', element: <Shorts /> },

@@ -48,7 +48,7 @@ function Navbar() {
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17,10.5V7c0-0.55-0.45-1-1-1H4C3.45,6,3,6.45,3,7v10c0,0.55,0.45,1,1,1h12c0.55,0,1-0.45,1-1v-3.5l4,4v-11L17,10.5z M14,13h-3v3H9v-3H6v-2h3V8h2v3h3V13z"></path></svg>
                 Upload video
               </button>
-              <button onClick={() => handleCreateOption('/shorts')} className="create-item">
+              <button onClick={() => handleCreateOption('/upload-short')} className="create-item">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.77,10.32l-1.2-.5L18,8.06a3.74,3.74,0,0,0-3.5-5.5,3.7,3.7,0,0,0-1.63.38L6,6.37a3.7,3.7,0,0,0-2.14,3.34,3.73,3.73,0,0,0,2.54,3.54l1.2.5L6,15.44a3.74,3.74,0,0,0,3.5,5.5,3.7,3.7,0,0,0,1.63-.38l6.87-3.43a3.7,3.7,0,0,0,2.14-3.34A3.73,3.73,0,0,0,17.77,10.32ZM10,14.5v-5l4.5,2.5Z"></path></svg>
                 Create Short
               </button>

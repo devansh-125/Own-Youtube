@@ -184,10 +184,19 @@
 }
 
 .video-preview-card {
-    background-color: var(--hover-bg);
-    border-radius: 4px;
+    background-color: var(--input-bg);
+    border-radius: 8px;
     overflow: hidden;
-    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+}
+
+.video-preview-card.short-preview {
+    max-width: 240px;
+    margin: 0 auto;
+}
+
+.video-preview-card.short-preview .preview-display {
+    aspect-ratio: 9 / 16;
 }
 
 .preview-display {

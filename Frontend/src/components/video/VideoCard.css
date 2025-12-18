@@ -113,12 +113,12 @@
   right: 0;
   background-color: var(--card-bg);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 10; /* Ensures the menu appears on top of other content */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  z-index: 100; /* Ensures the menu appears on top of other content */
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 120px; /* Gives the menu a consistent width */
+  width: 150px; /* Gives the menu a consistent width */
   border: 1px solid var(--border-color);
 }
 
