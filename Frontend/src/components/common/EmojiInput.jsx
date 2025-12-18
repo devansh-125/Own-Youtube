@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import useOnClickOutside from '../../hooks/useOnClickOutside.js'; // Import the custom hook
+import { useTheme } from '../../context/ThemeContext.jsx';
 import './EmojiInput.css';
 
-function EmojiInput({ value, onChange, placeholder, as = 'input', theme = 'dark', onFocus, actions, className }) {
+function EmojiInput({ value, onChange, placeholder, as = 'input', onFocus, actions, className }) {
     const [showPicker, setShowPicker] = useState(false);
+    const { isDarkMode } = useTheme();
     
     // Create a ref to attach to the emoji picker's main container
     const pickerRef = useRef(null);
@@ -27,7 +29,7 @@ function EmojiInput({ value, onChange, placeholder, as = 'input', theme = 'dark'
     // Conditionally render either an <input> or a <textarea>
     const InputComponent = as;
 
-    const pickerTheme = theme === 'light' ? Theme.LIGHT : Theme.DARK;
+    const pickerTheme = isDarkMode ? Theme.DARK : Theme.LIGHT;
 
     return (
         <div className={`emoji-input-wrapper ${className || ''}`} ref={pickerRef}>

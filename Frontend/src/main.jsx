@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.jsx' // 1. Import the provider
+import { ThemeProvider } from './context/ThemeContext.jsx'
 
 // Import your page components
 import Home from './pages/Home.jsx';
@@ -38,9 +39,9 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  
+  <ThemeProvider>
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
-    
+  </ThemeProvider>
 )

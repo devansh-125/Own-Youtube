@@ -8,7 +8,7 @@
 .up-next-title {
     font-size: 18px;
     font-weight: 700;
-    color: #f1f1f1;
+    color: var(--text-color);
     margin-bottom: 16px;
 }
 
@@ -20,7 +20,7 @@
 /* These styles are for the loading/empty text */
 .up-next-container p {
     font-size: 14px;
-    color: #aaa;
+    color: var(--text-secondary);
     padding: 10px;
     text-align: center;
 }

@@ -12,7 +12,7 @@
 }
 
 .upload-modal {
-    background-color: #282828;
+    background-color: var(--bg-color);
     width: 90%;
     max-width: 960px;
     height: 90vh;
@@ -20,8 +20,9 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
-    color: white;
+    color: var(--text-color);
     overflow: hidden;
+    border: 1px solid var(--border-color);
 }
 
 .upload-modal-header {
@@ -29,7 +30,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .modal-title {
@@ -50,13 +51,13 @@
 
 .save-status {
     font-size: 0.8rem;
-    color: #aaaaaa;
+    color: var(--text-secondary);
 }
 
 .close-btn {
     background: none;
     border: none;
-    color: white;
+    color: var(--text-color);
     font-size: 2rem;
     cursor: pointer;
     line-height: 1;
@@ -75,30 +76,30 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    color: #aaaaaa;
+    color: var(--text-secondary);
     font-size: 0.8rem;
 }
 
 .step.active {
-    color: #3ea6ff;
+    color: var(--accent-color);
 }
 
 .step-dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: #aaaaaa;
+    background-color: var(--text-secondary);
 }
 
 .step.active .step-dot {
-    background-color: #3ea6ff;
+    background-color: var(--accent-color);
     box-shadow: 0 0 0 4px rgba(62, 166, 255, 0.2);
 }
 
 .step-line {
     flex: 0 0 100px;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--border-color);
 }
 
 .upload-modal-content {
@@ -115,19 +116,19 @@
 
 .input-section {
     margin-bottom: 24px;
-    border: 1px solid #3f3f3f;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 8px 12px;
 }
 
 .input-section:focus-within {
-    border-color: #3ea6ff;
+    border-color: var(--accent-color);
 }
 
 .input-section label {
     display: block;
     font-size: 0.75rem;
-    color: #aaaaaa;
+    color: var(--text-secondary);
     margin-bottom: 4px;
 }
 
@@ -153,7 +154,7 @@
 .thumbnail-upload-box {
     width: 150px;
     aspect-ratio: 16 / 9;
-    border: 1px dashed #3f3f3f;
+    border: 1px dashed var(--border-color);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -178,12 +179,12 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    color: #aaaaaa;
+    color: var(--text-secondary);
     font-size: 0.75rem;
 }
 
 .video-preview-card {
-    background-color: #1f1f1f;
+    background-color: var(--hover-bg);
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 16px;
@@ -204,7 +205,7 @@
 }
 
 .preview-placeholder {
-    color: #717171;
+    color: var(--text-secondary);
     font-size: 0.8rem;
 }
 
@@ -220,17 +221,18 @@
 
 .info-row .label {
     font-size: 0.75rem;
-    color: #aaaaaa;
+    color: var(--text-secondary);
 }
 
 .info-row .link {
-    color: #3ea6ff;
+    color: var(--accent-color);
     font-size: 0.85rem;
 }
 
 .info-row .filename {
     font-size: 0.85rem;
     word-break: break-all;
+    color: var(--text-color);
 }
 
 .full-width {
@@ -239,7 +241,7 @@
 
 .upload-modal-footer {
     padding: 16px 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -265,23 +267,24 @@
 }
 
 .option-card {
-    border: 1px solid #3f3f3f;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 16px;
     display: flex;
     gap: 16px;
     margin-top: 16px;
+    color: var(--text-color);
 }
 
 .option-card.active {
-    border-color: #3ea6ff;
+    border-color: var(--accent-color);
 }
 
 .option-radio {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 2px solid #3ea6ff;
+    border: 2px solid var(--accent-color);
     position: relative;
 }
 
@@ -294,7 +297,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: #3ea6ff;
+    background-color: var(--accent-color);
 }
 
 .option-text h4 {
@@ -304,13 +307,13 @@
 .option-text p {
     margin: 0;
     font-size: 0.85rem;
-    color: #aaaaaa;
+    color: var(--text-secondary);
 }
 
 .sub-options {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--border-color);
 }
 
 .radio-label {

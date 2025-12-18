@@ -3,7 +3,7 @@
     align-items: flex-start;
     gap: 16px;
     width: 100%;
-    color: white;
+    color: var(--text-color);
     position: relative; /* Needed for the options menu */
 }
 
@@ -30,11 +30,12 @@
 .comment-username {
     font-weight: 500;
     font-size: 0.9rem;
+    color: var(--text-color);
 }
 
 .comment-time {
     font-size: 0.8rem;
-    color: #aaa;
+    color: var(--text-secondary);
 }
 
 .comment-text {
@@ -42,6 +43,7 @@
     line-height: 1.5;
     white-space: pre-wrap; /* Respects line breaks and spacing in the comment */
     word-wrap: break-word; /* Prevents long words from overflowing */
+    color: var(--text-color);
 }
 
 /* --- Styles for the Like Button and Actions --- */
@@ -55,7 +57,7 @@
 .like-button {
     background: none;
     border: none;
-    color: #aaa; /* Default color for the heart icon */
+    color: var(--text-secondary); /* Default color for the heart icon */
     cursor: pointer;
     padding: 4px;
     display: flex;
@@ -75,7 +77,7 @@
 
 .like-count {
     font-size: 0.8rem;
-    color: #aaa;
+    color: var(--text-secondary);
 }
 /* ------------------------------------------- */
 
@@ -89,7 +91,7 @@
 .options-button {
     background: none;
     border: none;
-    color: #aaa;
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 8px;
     border-radius: 50%;
@@ -97,7 +99,7 @@
     height: 40px;
 }
 .options-button:hover {
-    background-color: #333;
+    background-color: var(--hover-bg);
     color: #fff;
 }
 .options-button svg {

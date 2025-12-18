@@ -21,7 +21,7 @@
     height: 94px; /* 16:9 aspect ratio */
     object-fit: cover;
     border-radius: 8px;
-    background-color: #222;
+    background-color: var(--card-bg);
 }
 
 .suggestion-duration {
@@ -43,7 +43,7 @@
 .suggestion-title {
     font-size: 14px;
     font-weight: 600;
-    color: #f1f1f1;
+    color: var(--text-color);
     margin: 0 0 6px 0;
     /* Clamp text to 2 lines */
     display: -webkit-box;
@@ -56,7 +56,7 @@
 .suggestion-channel-name,
 .suggestion-stats {
     font-size: 12px;
-    color: #aaa;
+    color: var(--text-secondary);
 }
 
 .suggestion-channel-name {

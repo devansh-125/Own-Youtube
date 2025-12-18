@@ -6,21 +6,21 @@
     font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    background-color: #ffffff;
-    color: #0f0f0f;
+    background-color: var(--text-color);
+    color: var(--bg-color);
 }
 
 .subscribe-btn:hover {
-    background-color: #e5e5e5;
+    opacity: 0.9;
 }
 
 /* Subscribed state: grey background, white text */
 .subscribe-btn.subscribed {
-    background-color: #272727;
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    border: 1px solid var(--border-color);
 }
 
 .subscribe-btn.subscribed:hover {
-    background-color: #3f3f3f;
+    background-color: var(--hover-bg);
 }

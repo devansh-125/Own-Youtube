@@ -1,10 +1,10 @@
 .sidebar {
     min-width: 240px;
     width: 240px;
-    background-color: black;
-    min-height: calc(100vh - 80px);
+    background-color: var(--sidebar-bg);
+    min-height: calc(100vh - 56px);
     padding-top: 1rem;
-    /* border: 6px ridge gray;  */
+    transition: background-color 0.3s;
 }
 
 .sidebar-links {
@@ -17,31 +17,25 @@
     display: flex;
     align-items: center;
     padding: 12px 12px;
-    color: white;
+    color: var(--text-color);
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.95rem;
     border-radius: 10px;
     margin: 4px 12px;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.3s;
 }
 
 .sidebar-link:hover {
-    background-color: #272727;
+    background-color: var(--hover-bg);
 }
 
 /* This style is applied by NavLink for the currently active page */
 .sidebar-link.active {
-    background-color: #3d3d3d;
+    background-color: var(--hover-bg);
     font-weight: 600;
 }
 
 .sidebar-link .icon {
     margin-right: 20px;
     font-size: 1.2rem;
-}
-
-body {
-    background-color: black; /* Dark background to see the border clearly */
-    margin: 0;
-    padding: 5px; /* Add some space around the sidebar */
 }

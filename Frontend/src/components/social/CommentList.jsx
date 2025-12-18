@@ -77,7 +77,6 @@ function CommentList({ videoId }) {
                             value={newComment}
                             onChange={handleCommentChange}
                             placeholder="Add a comment..."
-                            theme="dark"
                             onFocus={() => setIsInputFocused(true)}
                             actions={(isInputFocused || newComment.trim()) && (
                                 <div className="comment-form-actions">

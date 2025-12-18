@@ -1,6 +1,7 @@
 .profile-card-wrapper {
   width: 100%;
-  background-color: #0f0f0f;
+  background-color: var(--bg-color);
+  transition: background-color 0.3s;
 }
 
 .channel-banner-container {
@@ -46,14 +47,14 @@
   font-size: 2.25rem;
   font-weight: 700;
   margin: 0;
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 .channel-meta-info {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #aaaaaa;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -62,7 +63,7 @@
 }
 
 .channel-description-snippet {
-  color: #aaaaaa;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin: 4px 0;
   cursor: pointer;
@@ -82,21 +83,21 @@
   font-weight: 500;
   cursor: pointer;
   border: none;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, color 0.3s;
 }
 
 .yt-action-btn.primary {
-  background-color: #ffffff;
-  color: #0f0f0f;
+  background-color: var(--text-color);
+  color: var(--bg-color);
 }
 
 .yt-action-btn.primary:hover {
-  background-color: #e5e5e5;
+  opacity: 0.9;
 }
 
 .yt-action-btn.secondary {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: var(--hover-bg);
+  color: var(--text-color);
 }
 
 .yt-action-btn.secondary:hover {

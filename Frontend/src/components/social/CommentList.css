@@ -28,7 +28,7 @@
 .comment-cancel-btn {
     background: none;
     border: none;
-    color: white;
+    color: var(--text-color);
     padding: 10px 16px;
     border-radius: 20px;
     cursor: pointer;
@@ -37,12 +37,12 @@
 }
 
 .comment-cancel-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--hover-bg);
 }
 
 .comment-submit-btn {
-    background-color: #3ea6ff;
-    color: #0f0f0f;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
     border: none;
     padding: 10px 16px;
     border-radius: 20px;
@@ -52,8 +52,8 @@
 }
 
 .comment-submit-btn:disabled {
-    background-color: #3f3f3f;
-    color: #717171;
+    background-color: var(--hover-bg);
+    color: var(--text-secondary);
     cursor: default;
 }
 

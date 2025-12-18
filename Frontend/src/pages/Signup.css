@@ -3,18 +3,18 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    color: white;
+    color: var(--text-color);
     min-height: calc(100vh - 60px);
 }
 
 .signup-form-wrapper {
-    background-color: #181818;
+    background-color: var(--card-bg);
     padding: 2rem;
     border-radius: 12px;
-    border: 1px solid #272727;
+    border: 1px solid var(--border-color);
     width: 100%;
     max-width: 450px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .signup-title {
@@ -47,17 +47,17 @@
 
 .input-group label {
     font-weight: 500;
-    color: #aaa;
+    color: var(--text-secondary);
 }
 
 .input-group input[type="text"],
 .input-group input[type="email"],
 .input-group input[type="password"] {
     width: 100%;
-    background-color: #121212;
-    border: 1px solid #373737;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    color: white;
+    color: var(--text-color);
     font-size: 1rem;
     padding: 12px;
     box-sizing: border-box;
@@ -66,18 +66,18 @@
 
 .input-group input:focus {
     outline: none;
-    border-color: #ae7aff;
+    border-color: var(--accent-color);
 }
 
 .file-input {
-    color: #ddd;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
 .file-input::file-selector-button {
-    background-color: #373737;
-    color: white;
-    border: none;
+    background-color: var(--hover-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     padding: 8px 12px;
     border-radius: 6px;
     cursor: pointer;
@@ -86,12 +86,12 @@
 }
 
 .file-input::file-selector-button:hover {
-    background-color: #4f4f4f;
+    background-color: var(--border-color);
 }
 
 .signup-btn-submit {
-    background-color: #3ea6ff;
-    color: white;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
     border: none;
     padding: 12px;
     border-radius: 8px;

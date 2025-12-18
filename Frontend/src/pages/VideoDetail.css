@@ -2,9 +2,10 @@
     display: flex;
     gap: 24px;
     padding: 24px 72px;
-    background-color: #0f0f0f;
-    color: #ffffff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     min-height: calc(100vh - 56px);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .primary-column {
@@ -70,7 +71,7 @@
 
 .sub-count {
     font-size: 0.75rem;
-    color: #aaaaaa;
+    color: var(--text-secondary);
 }
 
 .action-buttons {
@@ -87,8 +88,8 @@
     padding: 0 16px;
     height: 36px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
     border: none;
     font-weight: 500;
     font-size: 0.9rem;
@@ -106,13 +107,14 @@
 }
 
 .video-description-box {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--hover-bg);
     border-radius: 12px;
     padding: 12px;
     margin-top: 12px;
     margin-bottom: 24px;
     font-size: 0.9rem;
     line-height: 1.5;
+    color: var(--text-color);
 }
 
 .video-stats-inner {
@@ -129,7 +131,7 @@
 
 .status-message {
     padding: 2rem;
-    color: white;
+    color: var(--text-color);
     min-height: 80vh;
     text-align: center;
     font-size: 1.2rem;

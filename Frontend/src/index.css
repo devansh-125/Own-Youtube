@@ -3,9 +3,19 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Default Dark Theme Variables */
+  --bg-color: #0f0f0f;
+  --text-color: #ffffff;
+  --text-secondary: #aaaaaa;
+  --nav-bg: #0f0f0f;
+  --sidebar-bg: #0f0f0f;
+  --card-bg: #1a1a1a;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --hover-bg: rgba(255, 255, 255, 0.1);
+  --input-bg: #121212;
+  --accent-color: #3ea6ff;
+  --btn-secondary-bg: rgba(255, 255, 255, 0.1);
+  --btn-secondary-text: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,19 +23,28 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+.light-mode {
+  --bg-color: #ffffff;
+  --text-color: #0f0f0f;
+  --text-secondary: #606060;
+  --nav-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --card-bg: #ffffff;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --input-bg: #f0f0f0;
+  --accent-color: #065fd4;
+  --btn-secondary-bg: #f2f2f2;
+  --btn-secondary-text: #0f0f0f;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 h1 {

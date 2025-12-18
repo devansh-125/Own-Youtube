@@ -12,13 +12,14 @@
 }
 
 .share-modal-content {
-    background-color: #212121;
+    background-color: var(--bg-color);
     border-radius: 12px;
     width: 90%;
     max-width: 500px;
     padding: 24px;
-    color: white;
+    color: var(--text-color);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-color);
 }
 
 .share-modal-header {
@@ -37,7 +38,7 @@
 .close-btn {
     background: none;
     border: none;
-    color: white;
+    color: var(--text-color);
     font-size: 1.5rem;
     cursor: pointer;
 }
@@ -58,7 +59,7 @@
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    color: #aaa;
+    color: var(--text-secondary);
     font-size: 0.75rem;
     min-width: 60px;
 }
@@ -67,7 +68,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: #3f3f3f;
+    background-color: var(--hover-bg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,7 +76,7 @@
 }
 
 .share-option:hover .share-icon-wrapper {
-    background-color: #4f4f4f;
+    background-color: var(--border-color);
 }
 
 .share-icon-wrapper img {
@@ -85,8 +86,8 @@
 
 .share-link-section {
     display: flex;
-    background-color: #0f0f0f;
-    border: 1px solid #3f3f3f;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 4px;
     align-items: center;
@@ -96,15 +97,15 @@
     flex: 1;
     background: none;
     border: none;
-    color: white;
+    color: var(--text-color);
     padding: 8px 12px;
     font-size: 0.9rem;
     outline: none;
 }
 
 .share-link-section button {
-    background-color: #3ea6ff;
-    color: #0f0f0f;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
     border: none;
     padding: 8px 16px;
     border-radius: 18px;
