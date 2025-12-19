@@ -1,26 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import API from '../services/api.js';
 import './Shorts.css';
+import { Loader } from '../components/common/Loader.jsx';
 
 function Shorts() {
+    const [shorts, setShorts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const fetchShorts = async () => {
+            try {
+                const response = await API.get('/videos?isShort=true');
+                setShorts(response.data.data.docs || []);
+            } catch (error) {
+                console.error("Error fetching shorts:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchShorts();
+    }, []);
+
+    if (loading) return <Loader />;
+
+    if (shorts.length === 0) {
+        return (
+            <div className="shorts-container">
+                <div className="short-video-card">
+                    <div className="short-video-placeholder">
+                        <div className="shorts-logo-large">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.77,10.32l-1.2-.5L18,8.06a3.74,3.74,0,0,0-3.5-5.5,3.7,3.7,0,0,0-1.63.38L6,6.37a3.7,3.7,0,0,0-2.14,3.34,3.73,3.73,0,0,0,2.54,3.54l1.2.5L6,15.44a3.74,3.74,0,0,0,3.5,5.5,3.7,3.7,0,0,0,1.63-.38l6.87-3.43a3.7,3.7,0,0,0,2.14-3.34A3.73,3.73,0,0,0,17.77,10.32ZM10,14.5v-5l4.5,2.5Z"></path>
+                            </svg>
+                        </div>
+                        <h2>No Shorts found</h2>
+                        <p>Be the first to upload a Short!</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const currentShort = shorts[currentIndex];
+
     return (
         <div className="shorts-container">
             <div className="short-video-card">
-                <div className="short-video-placeholder">
-                    <div className="shorts-logo-large">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17.77,10.32l-1.2-.5L18,8.06a3.74,3.74,0,0,0-3.5-5.5,3.7,3.7,0,0,0-1.63.38L6,6.37a3.7,3.7,0,0,0-2.14,3.34,3.73,3.73,0,0,0,2.54,3.54l1.2.5L6,15.44a3.74,3.74,0,0,0,3.5,5.5,3.7,3.7,0,0,0,1.63-.38l6.87-3.43a3.7,3.7,0,0,0,2.14-3.34A3.73,3.73,0,0,0,17.77,10.32ZM10,14.5v-5l4.5,2.5Z"></path>
-                        </svg>
-                    </div>
-                    <h2>Shorts coming soon!</h2>
-                    <p>We are working on bringing vertical short-form videos to OwnTube. Stay tuned!</p>
-                </div>
-
+                <video 
+                    src={currentShort.videoFile} 
+                    autoPlay 
+                    loop 
+                    muted 
+                    className="short-video-player"
+                />
+                
                 <div className="short-actions">
                     <button className="short-action-btn">
                         <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                             <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"></path>
                         </svg>
-                        <span>Like</span>
+                        <span>{currentShort.likes?.length || 0}</span>
                     </button>
                     <button className="short-action-btn">
                         <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
@@ -44,13 +84,30 @@ function Shorts() {
 
                 <div className="short-info">
                     <div className="short-user">
-                        <div className="short-avatar"></div>
-                        <span className="short-username">@OwnTube</span>
+                        <img src={currentShort.owner?.avatar} alt="" className="short-avatar-img" />
+                        <span className="short-username">@{currentShort.owner?.username}</span>
                         <button className="nav-button" style={{ padding: '4px 12px', fontSize: '12px' }}>Subscribe</button>
                     </div>
-                    <p className="short-title">Welcome to OwnTube Shorts! #shorts</p>
+                    <p className="short-title">{currentShort.title}</p>
                 </div>
             </div>
+            
+            {shorts.length > 1 && (
+                <div className="shorts-navigation">
+                    <button 
+                        disabled={currentIndex === 0} 
+                        onClick={() => setCurrentIndex(prev => prev - 1)}
+                    >
+                        ↑
+                    </button>
+                    <button 
+                        disabled={currentIndex === shorts.length - 1} 
+                        onClick={() => setCurrentIndex(prev => prev + 1)}
+                    >
+                        ↓
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

@@ -29,6 +29,32 @@
     transform: scale(1.05); /* Zoom in slightly on hover */
 }
 
+/* Shorts specific styles */
+.video-card.is-short .thumbnail-img,
+.video-card.is-short .thumbnail-video {
+    aspect-ratio: 9 / 16;
+}
+
+.shorts-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 2;
+}
+
+.shorts-badge svg {
+    color: #ff0000;
+}
+
 .video-details {
   display: flex;
   gap: 10px;

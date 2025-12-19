@@ -10,7 +10,7 @@ const videoSchema  = new Schema(
         },
         thumbnail: {
             type: String, // cloudinary
-            required: true
+            required: false
         },
         title: {
             type: String, 
@@ -18,7 +18,7 @@ const videoSchema  = new Schema(
         },
         discription: {
             type: String, 
-            required: true
+            required: false
         },
         duration: {
             type: Number, 
@@ -33,9 +33,13 @@ const videoSchema  = new Schema(
             default: true  
 
         },
+        isShort: {
+            type: Boolean,
+            default: false
+        },
         owner: {
             type: Schema.Types.ObjectId,
-            ref: "User "
+            ref: "User"
         },
         likes: [{
             type: Schema.Types.ObjectId,

@@ -9,12 +9,21 @@ import { v2 as cloudinary } from "cloudinary";
 
 
 const getAllVideos = asyncHandler(async (req, res) => {
-    const { page = 1, limit = 9, query, sortBy, sortType, userId } = req.query;
+    const { page = 1, limit = 9, query, sortBy, sortType, userId, isShort } = req.query;
 
     const matchStage = {};
 
     if (query) {
         matchStage.$text = { $search: query };
+    }
+
+    if (isShort !== undefined) {
+        if (isShort === 'true') {
+            matchStage.isShort = true;
+        } else {
+            // Match videos where isShort is false OR does not exist (for old videos)
+            matchStage.isShort = { $ne: true };
+        }
     }
 
     if (userId) {
@@ -71,50 +80,85 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 
 const publishAVideo = asyncHandler(async (req, res) => {
-    // Step 1: Get title and description from the request body
-    const { title, discription } = req.body;
+    try {
+        console.log("Publishing video - Body:", req.body);
+        console.log("Publishing video - Files:", req.files);
+        console.log("Publishing video - User:", req.user);
 
-    // Step 2: Validate that title and description are not empty
-    if (!title || !discription) {
-        throw new ApiError(400, "Title and discription are required");
+        // Step 1: Get title and description from the request body
+        const { title, discription, isShort } = req.body;
+
+        // Step 2: Validate that title is not empty
+        if (!title || title.trim() === "") {
+            throw new ApiError(400, "Title is required and cannot be empty");
+        }
+
+        // Step 3: Get the local paths
+        const videoFileLocalPath = req.files?.videoFile?.[0]?.path;
+        const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
+
+        if (!videoFileLocalPath) {
+            console.error("Upload Error: No video file found in req.files", req.files);
+            throw new ApiError(400, "Video file is required. Please select a valid video.");
+        }
+
+        // Use absolute path for Cloudinary upload
+        const path = await import('path');
+        const absoluteVideoPath = path.resolve(videoFileLocalPath);
+        console.log("Absolute video path:", absoluteVideoPath);
+
+        // Step 5: Upload video to Cloudinary
+        const videoFile = await uploadCloudinary(absoluteVideoPath);
+        
+        if (!videoFile) {
+            throw new ApiError(500, "Failed to upload video to Cloudinary. Check backend logs.");
+        }
+
+        const videoUrl = videoFile.secure_url || videoFile.url;
+        if (!videoUrl) {
+            throw new ApiError(500, "Cloudinary did not return a URL. Check backend logs.");
+        }
+
+        // Step 6: Handle thumbnail (upload if exists, otherwise use default)
+        let thumbnailUrl = "https://res.cloudinary.com/dq1qndzmn/image/upload/v1710000000/default_thumb.jpg"; // Default thumbnail
+        if (thumbnailLocalPath) {
+            const absoluteThumbPath = path.resolve(thumbnailLocalPath);
+            const thumbnail = await uploadCloudinary(absoluteThumbPath);
+            if (thumbnail?.secure_url || thumbnail?.url) {
+                thumbnailUrl = thumbnail.secure_url || thumbnail.url;
+            }
+        }
+
+        // Step 7: Create a new video document in the database
+        const video = await Video.create({
+            title,
+            discription: discription || "No description",
+            videoFile: videoUrl,
+            thumbnail: thumbnailUrl,
+            duration: videoFile.duration || 0, 
+            owner: req.user?._id,
+            isShort: isShort === 'true' || isShort === true
+        });
+
+        // Cleanup local files after DB success
+        const fs = await import('fs');
+        try {
+            if (fs.existsSync(absoluteVideoPath)) fs.unlinkSync(absoluteVideoPath);
+            if (thumbnailLocalPath && fs.existsSync(path.resolve(thumbnailLocalPath))) {
+                fs.unlinkSync(path.resolve(thumbnailLocalPath));
+            }
+        } catch (cleanupError) {
+            console.error("Cleanup Error (non-fatal):", cleanupError);
+        }
+
+        // Step 8: Send a success response with the created video data
+        return res.status(201).json(
+            new ApiResponse(201, video, "Video published successfully")
+        );
+    } catch (error) {
+        console.error("CRITICAL UPLOAD ERROR:", error);
+        throw error; // Re-throw to be caught by asyncHandler/global error handler
     }
-
-    // Step 3: Get the local paths for the video and thumbnail files from Multer
-    const videoFileLocalPath = req.files?.videoFile?.[0]?.path;
-    const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
-
-    // Step 4: Validate that both files were uploaded
-    if (!videoFileLocalPath) {
-        throw new ApiError(400, "Video file is required");
-    }
-    if (!thumbnailLocalPath) {
-        throw new ApiError(400, "Thumbnail is required");
-    }
-
-    // Step 5: Upload both files to Cloudinary
-    const videoFile = await uploadCloudinary(videoFileLocalPath);
-    const thumbnail = await uploadCloudinary(thumbnailLocalPath);
-
-    // Step 6: Validate that the uploads were successful
-    if (!videoFile?.url || !thumbnail?.url) {
-        throw new ApiError(500, "Failed to upload video or thumbnail to Cloudinary");
-    }
-
-    // Step 7: Create a new video document in the database
-    const video = await Video.create({
-        title,
-        discription,
-        videoFile: videoFile.url,
-        thumbnail: thumbnail.url,
-        duration: videoFile.duration, // Cloudinary provides video duration
-        owner: req.user._id // Get the owner from the authenticated user
-    });
-    // console.log(req.user.fullName);
-
-    // Step 8: Send a success response with the created video data
-    return res.status(201).json(
-        new ApiResponse(201, video, "Video published successfully")
-    );
 });
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import VideoCard from '../components/video/VideoCard.jsx';
 import './Home.css';
-import axios from 'axios'; // Import axios to make API calls
+import API from '../services/api.js';
 
 function Home() {
   const [videos, setVideos] = useState([]);
@@ -13,8 +13,7 @@ function Home() {
     const fetchVideos = async () => {
       try {
         setLoading(true);
-        // Make sure your backend server is running on port 8000
-        const response = await axios.get('http://localhost:8000/api/v1/videos'); 
+        const response = await API.get('/videos?isShort=false'); 
         
         // Assuming your API sends back data in a 'data' property
         setVideos(response.data.data.docs); 

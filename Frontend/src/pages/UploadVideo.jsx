@@ -29,12 +29,17 @@ function UploadVideo({ isShort = false }) {
         formData.append('title', title);
         formData.append('discription', isShort ? (description || 'Short video') : description); 
         formData.append('videoFile', videoFile);
-        // For shorts, we can use a default thumbnail or the first frame if not provided
+        formData.append('isShort', isShort);
+        
         if (thumbnail) {
             formData.append('thumbnail', thumbnail);
-        } else if (isShort) {
-            // In a real app, you'd generate this. For now, we'll require it or use a placeholder
-            formData.append('thumbnail', 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg');
+        }
+
+        console.log("Submitting upload - isShort:", isShort);
+        console.log("Video file size:", (videoFile.size / (1024 * 1024)).toFixed(2) + " MB");
+        console.log("FormData entries:");
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
         }
 
         try {

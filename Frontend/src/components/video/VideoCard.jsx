@@ -61,8 +61,8 @@ function VideoCard({ video, onProfilePage = false }) {
     return (
         
         <Link 
-            to={`/video/${video._id}`} 
-            className='video-card'
+            to={video.isShort ? `/shorts` : `/video/${video._id}`} 
+            className={`video-card ${video.isShort ? 'is-short' : ''}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
@@ -71,6 +71,14 @@ function VideoCard({ video, onProfilePage = false }) {
                     <video className='thumbnail-video' src={video.videoFile} autoPlay muted loop playsInline />
                 ) : (
                     <img src={video.thumbnail} alt={video.title} className='thumbnail-img' />
+                )}
+                {video.isShort && (
+                    <div className="shorts-badge">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                            <path d="M17.77,10.32l-1.2-.5L18,8.06a3.74,3.74,0,0,0-3.5-5.5,3.7,3.7,0,0,0-1.63.38L6,6.37a3.7,3.7,0,0,0-2.14,3.34,3.73,3.73,0,0,0,2.54,3.54l1.2.5L6,15.44a3.74,3.74,0,0,0,3.5,5.5,3.7,3.7,0,0,0,1.63-.38l6.87-3.43a3.7,3.7,0,0,0,2.14-3.34A3.73,3.73,0,0,0,17.77,10.32ZM10,14.5v-5l4.5,2.5Z"></path>
+                        </svg>
+                        <span>Shorts</span>
+                    </div>
                 )}
             </div>
             

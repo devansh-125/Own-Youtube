@@ -429,6 +429,42 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 foreignField: "owner",
                 as: "videos",
                 pipeline: [
+                    { $match: { isShort: { $ne: true } } },
+                    {
+                        $lookup: {
+                            from: "users",
+                            localField: "owner",
+                            foreignField: "_id",
+                            as: "ownerDetails",
+                            pipeline: [
+                                {
+                                    $project: {
+                                        username: 1,
+                                        avatar: 1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $addFields: {
+                            owner: { $first: "$ownerDetails" }
+                        }
+                    },
+                    {
+                        $project: { ownerDetails: 0 }
+                    }
+                ]
+            }
+        },
+        {
+            $lookup: {
+                from: "videos",
+                localField: "_id",
+                foreignField: "owner",
+                as: "shorts",
+                pipeline: [
+                    { $match: { isShort: true } },
                     {
                         $lookup: {
                             from: "users",
@@ -461,6 +497,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 subscribersCount: { $size: "$subscribers" },
                 channelsSubscribedToCount: { $size: "$subscribedTo" },
                 videosCount: { $size: "$videos" },
+                shortsCount: { $size: "$shorts" },
                 isSubscribed: {
                     $cond: {
                         if: { $in: [req.user?._id, "$subscribers.subscriber"] },
@@ -481,8 +518,9 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
                 coverImage: 1,
                 email: 1,
                 videosCount: 1,
-                videos: 1
-
+                videos: 1,
+                shortsCount: 1,
+                shorts: 1
             }
         }
     ])
