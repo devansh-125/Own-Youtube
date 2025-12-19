@@ -79,8 +79,8 @@ const registerUser = asyncHandler( async(req,res) =>{
 
    const user = await User.create({
     fullName,
-    avatar: avatar.url,
-    coverImage: coverImage?.url || "",
+    avatar: avatar.secure_url || avatar.url,
+    coverImage: coverImage?.secure_url || coverImage?.url || "",
     email,
     password,
     username: username.toLowerCase( )
@@ -260,9 +260,10 @@ const changeCurrentPassword = asyncHandler( async(req , res) => {
 
 
 const getCurrentUser = asyncHandler( async (req, res)=>{
+    const user = await User.findById(req.user?._id).select("-password -refreshToken");
     return res
     .status(200)
-    .json(new ApiResponse(200, req.user , "current user fetched successfully "))
+    .json(new ApiResponse(200, user , "current user fetched successfully "))
 });
 
 
@@ -313,7 +314,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         req.user?._id,
         {
             $set: {
-                avatar: avatar.url // Set the new avatar URL
+                avatar: avatar.secure_url || avatar.url // Set the new avatar URL
             }
         },
         { new: true } // This option returns the updated document
@@ -367,7 +368,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         req.user?._id,
         {
             $set: {
-                coverImage: coverImage.url
+                coverImage: coverImage.secure_url || coverImage.url
             }
         },
         { new: true }
