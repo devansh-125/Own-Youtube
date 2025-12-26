@@ -49,7 +49,13 @@ const videoSchema  = new Schema(
         dislikes: [{
             type: Schema.Types.ObjectId,
             ref: "User"
-        }]
+        }],
+
+        // Embedding for RAG semantic search
+        embedding: {
+            type: [Number], // Array of numbers (vector)
+            default: null
+        }
 
     },
     {

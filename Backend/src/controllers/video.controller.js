@@ -6,6 +6,7 @@ import {ApiResponse} from "../utils/ApiResponse.js"
 import asyncHandler from "../utils/asyncHandler.js"
 import {uploadCloudinary} from "../utils/cloudinary.js"
 import { v2 as cloudinary } from "cloudinary";
+import { generateEmbedding, generateAndSaveVideoEmbedding } from "../services/search.service.js";
 
 
 const getAllVideos = asyncHandler(async (req, res) => {
@@ -139,6 +140,25 @@ const publishAVideo = asyncHandler(async (req, res) => {
             owner: req.user?._id,
             isShort: isShort === 'true' || isShort === true
         });
+
+        // Step 7.5: Generate and save embedding for RAG semantic search
+        // This converts video content to vector for efficient semantic search
+        try {
+            console.log(`⏳ Generating embedding for video: "${title}"`);
+            
+            // Generate embedding from all video content
+            const embedding = await generateAndSaveVideoEmbedding(video);
+            
+            // Save embedding to database (for instant search later!)
+            video.embedding = embedding;
+            await video.save();
+            
+            console.log(`✅ Video "${title}" is now indexed for semantic search!`);
+        } catch (embeddingError) {
+            console.error("⚠️ Embedding generation failed (non-critical):", embeddingError.message);
+            // Continue even if embedding fails - video is still created
+            // Just won't appear in semantic search results until embedding is available
+        }
 
         // Cleanup local files after DB success
         const fs = await import('fs');

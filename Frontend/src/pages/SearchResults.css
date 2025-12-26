@@ -1,0 +1,132 @@
+.search-results-container {
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  padding: 2rem;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 100%);
+  color: #fff;
+}
+
+.search-header {
+  margin-bottom: 3rem;
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.search-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.search-query {
+  color: #ff0080;
+  font-style: italic;
+}
+
+.search-info {
+  font-size: 0.95rem;
+  color: #a0aec0;
+  margin-top: 0.5rem;
+}
+
+.search-type {
+  background: rgba(255, 0, 128, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.25rem;
+  color: #ff0080;
+  font-weight: 600;
+}
+
+.video-grid.search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.no-results-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.no-results h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #cbd5e1;
+}
+
+.no-results p {
+  color: #a0aec0;
+  font-size: 1rem;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search-results-container {
+    padding: 1rem;
+  }
+
+  .search-title {
+    font-size: 1.5rem;
+  }
+
+  .video-grid.search-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-results-container {
+    padding: 0.5rem;
+  }
+
+  .search-title {
+    font-size: 1.2rem;
+  }
+
+  .search-info {
+    font-size: 0.85rem;
+  }
+
+  .video-grid.search-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.8rem;
+  }
+}
