@@ -23,7 +23,7 @@ Your YouTube clone now has **RAG-powered semantic search** using **Google Gemini
 
 ### Backend
 - `Backend/src/app.js` - Added search routes
-- `Backend/.env` - Added Gemini API key: `AIzaSyA1n7I4QfLvDZvipj69gyjWwSPtNSGp_yo`
+- `Backend/.env` - Added Gemini API key (see .env file)
 - `Backend/package.json` - Added `@google/generative-ai`
 
 ### Frontend

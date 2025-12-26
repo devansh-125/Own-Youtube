@@ -1,9 +1,7 @@
 # ❌ Gemini API Key Issue
 
 ## Problem
-The Gemini API key in your `.env` file appears to be **invalid or incomplete**.
-
-Current key: `AIzaSyA1n7I4QfLvDZvipj69gyjWwSPtNSGp_yo`
+The Gemini API key appears to be invalid or incomplete.
 
 Error: `API_KEY_INVALID` - Please pass a valid API key
 
@@ -33,7 +31,7 @@ GEMINI_API_KEY=<YOUR_NEW_API_KEY_HERE>
 
 **Example** (do NOT use this):
 ```properties
-GEMINI_API_KEY=AIzaSyA1n7I4QfLvDZvipj69gyjWwSPtNSGp_yo12345abcdefghijklmnopqr
+GEMINI_API_KEY=<YOUR_API_KEY_HERE>
 ```
 
 ---
