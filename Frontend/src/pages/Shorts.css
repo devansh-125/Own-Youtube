@@ -186,3 +186,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

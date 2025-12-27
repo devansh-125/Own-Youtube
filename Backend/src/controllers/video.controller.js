@@ -81,6 +81,10 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 
 const publishAVideo = asyncHandler(async (req, res) => {
+    const fs = await import('fs');
+    const path = await import('path');
+    let videoFileLocalPath, thumbnailLocalPath;
+    
     try {
         console.log("Publishing video - Body:", req.body);
         console.log("Publishing video - Files:", req.files);
@@ -95,8 +99,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
         }
 
         // Step 3: Get the local paths
-        const videoFileLocalPath = req.files?.videoFile?.[0]?.path;
-        const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
+        videoFileLocalPath = req.files?.videoFile?.[0]?.path;
+        thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
 
         if (!videoFileLocalPath) {
             console.error("Upload Error: No video file found in req.files", req.files);
@@ -104,7 +108,6 @@ const publishAVideo = asyncHandler(async (req, res) => {
         }
 
         // Use absolute path for Cloudinary upload
-        const path = await import('path');
         const absoluteVideoPath = path.resolve(videoFileLocalPath);
         console.log("Absolute video path:", absoluteVideoPath);
 
@@ -161,11 +164,14 @@ const publishAVideo = asyncHandler(async (req, res) => {
         }
 
         // Cleanup local files after DB success
-        const fs = await import('fs');
         try {
-            if (fs.existsSync(absoluteVideoPath)) fs.unlinkSync(absoluteVideoPath);
-            if (thumbnailLocalPath && fs.existsSync(path.resolve(thumbnailLocalPath))) {
-                fs.unlinkSync(path.resolve(thumbnailLocalPath));
+            if (videoFileLocalPath && fs.existsSync(videoFileLocalPath)) {
+                fs.unlinkSync(videoFileLocalPath);
+                console.log(`🗑️ Deleted temp video file: ${videoFileLocalPath}`);
+            }
+            if (thumbnailLocalPath && fs.existsSync(thumbnailLocalPath)) {
+                fs.unlinkSync(thumbnailLocalPath);
+                console.log(`🗑️ Deleted temp thumbnail file: ${thumbnailLocalPath}`);
             }
         } catch (cleanupError) {
             console.error("Cleanup Error (non-fatal):", cleanupError);
@@ -176,7 +182,23 @@ const publishAVideo = asyncHandler(async (req, res) => {
             new ApiResponse(201, video, "Video published successfully")
         );
     } catch (error) {
+        // Cleanup files on failure
         console.error("CRITICAL UPLOAD ERROR:", error);
+        console.log("🧹 Cleaning up temporary files due to error...");
+        
+        try {
+            if (videoFileLocalPath && fs.existsSync(videoFileLocalPath)) {
+                fs.unlinkSync(videoFileLocalPath);
+                console.log(`✅ Deleted temp video file on failure: ${videoFileLocalPath}`);
+            }
+            if (thumbnailLocalPath && fs.existsSync(thumbnailLocalPath)) {
+                fs.unlinkSync(thumbnailLocalPath);
+                console.log(`✅ Deleted temp thumbnail file on failure: ${thumbnailLocalPath}`);
+            }
+        } catch (cleanupError) {
+            console.error("Cleanup Error on failure (non-fatal):", cleanupError);
+        }
+        
         throw error; // Re-throw to be caught by asyncHandler/global error handler
     }
 });
