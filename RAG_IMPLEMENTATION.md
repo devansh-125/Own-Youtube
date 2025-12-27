@@ -73,7 +73,7 @@ Return top results
 - Registered search routes
 
 **`/Backend/.env`** (Modified)
-- Added `GEMINI_API_KEY=AIzaSyAIALFZc8rNXh_RVaye3OsGZtrAyrUenFY`
+- Added `GEMINI_API_KEY=AI***********************U`
 
 ### Frontend Files
 
