@@ -1,4 +1,4 @@
-# 🎬 Own-Youtube# 🎬 Own-Youtube
+# 🎬 Own-Youtube
 
 
 
@@ -12,11 +12,11 @@ This project includes **dual authentication (JWT + Google OAuth)**, **RAG semant
 
 
 
-## ✨ Features## ✨ Features
+## ✨ Features
 
 
 
-### 🔐 Authentication### 🔐 Authentication
+### 🔐 Authentication
 
 * **JWT Authentication**: Secure user registration and login with JSON Web Tokens.* **JWT Authentication**: Secure user registration and login with JSON Web Tokens.
 
