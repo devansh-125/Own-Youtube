@@ -7,6 +7,7 @@ import asyncHandler from "../utils/asyncHandler.js"
 import {uploadCloudinary} from "../utils/cloudinary.js"
 import { v2 as cloudinary } from "cloudinary";
 import { generateEmbedding, generateAndSaveVideoEmbedding } from "../services/search.service.js";
+import { extractFrameAtPercentage } from "../utils/generateThumbnail.js";
 
 
 const getAllVideos = asyncHandler(async (req, res) => {
@@ -205,13 +206,43 @@ const publishAVideo = asyncHandler(async (req, res) => {
             throw new ApiError(500, "Cloudinary did not return a URL. Check backend logs.");
         }
 
-        // Step 6: Handle thumbnail (upload if exists, otherwise use default)
+        // Step 6: Handle thumbnail (upload if exists, otherwise auto-generate for shorts or use default)
         let thumbnailUrl = "https://res.cloudinary.com/dq1qndzmn/image/upload/v1710000000/default_thumb.jpg"; // Default thumbnail
+        const isShortVideo = isShort === 'true' || isShort === true;
+
         if (thumbnailLocalPath) {
+            // User provided thumbnail - use it
             const absoluteThumbPath = path.resolve(thumbnailLocalPath);
             const thumbnail = await uploadCloudinary(absoluteThumbPath);
             if (thumbnail?.secure_url || thumbnail?.url) {
                 thumbnailUrl = thumbnail.secure_url || thumbnail.url;
+            }
+        } else if (isShortVideo) {
+            // Auto-generate thumbnail for shorts from video frames
+            try {
+                console.log("🎬 Auto-generating thumbnail for short video...");
+                
+                // Extract frame at 25% of video duration for better content visibility
+                const frameImagePath = await extractFrameAtPercentage(videoFileLocalPath, 25);
+                
+                // Upload extracted frame to Cloudinary
+                const extractedThumbnail = await uploadCloudinary(frameImagePath);
+                if (extractedThumbnail?.secure_url || extractedThumbnail?.url) {
+                    thumbnailUrl = extractedThumbnail.secure_url || extractedThumbnail.url;
+                    console.log("✅ Auto-generated thumbnail uploaded successfully");
+                }
+                
+                // Clean up the extracted frame file
+                try {
+                    if (fs.existsSync(frameImagePath)) {
+                        fs.unlinkSync(frameImagePath);
+                    }
+                } catch (cleanupErr) {
+                    console.error("Cleanup error for frame file:", cleanupErr.message);
+                }
+            } catch (thumbnailError) {
+                console.warn("⚠️ Failed to auto-generate thumbnail, using default:", thumbnailError.message);
+                // Continue with default thumbnail if auto-generation fails
             }
         }
 
