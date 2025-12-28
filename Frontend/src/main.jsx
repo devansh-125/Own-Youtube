@@ -19,6 +19,7 @@ import EditVideo from './pages/EditVideo.jsx'
 import LikedVideos from './pages/LikedVideos.jsx';
 import Shorts from './pages/Shorts.jsx';
 import SearchResults from './pages/SearchResults.jsx';
+import Subscriptions from './pages/Subscriptions.jsx';
 
 
 const router = createBrowserRouter([
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: 'shorts', element: <Shorts /> },
       { path: 'shorts/:shortId', element: <Shorts /> },
       { path: 'search-results', element: <SearchResults /> },
+      { path: 'subscriptions', element: <Subscriptions /> },
      
     ]
   }
