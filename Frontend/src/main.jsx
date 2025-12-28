@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext.jsx' // 1. Import the provider
+import { AuthProvider } from './context/AuthContext.jsx' 
 import { ThemeProvider } from './context/ThemeContext.jsx'
 
 // Import your page components

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar.jsx';
-import Sidebar from './components/layout/Sidebar.jsx'; // Sidebar ko import karein
+import Sidebar from './components/layout/Sidebar.jsx'; 
 import Footer from './components/layout/Footer.jsx';
-import './App.css'; // App.css ko import karein
+import './App.css'; 
 
 function App() {
   const location = useLocation();

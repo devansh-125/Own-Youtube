@@ -11,6 +11,8 @@ import { generateEmbedding, generateAndSaveVideoEmbedding } from "../services/se
 
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 9, query, sortBy, sortType, userId, isShort } = req.query;
+    console.log("getAllVideos - req.user:", req.user);
+    console.log("getAllVideos - req.user?._id:", req.user?._id);
 
     const matchStage = {};
 
@@ -57,12 +59,92 @@ const getAllVideos = asyncHandler(async (req, res) => {
                 from: "users",
                 localField: "owner",
                 foreignField: "_id",
-                as: "ownerDetails",
-                pipeline: [{ $project: { username: 1, avatar: 1 } }]
+                as: "ownerDetails"
+            }
+        }
+    );
+
+    // Add subscription info lookup - only if user is logged in
+    if (req.user?._id) {
+        pipeline.push(
+            {
+                $lookup: {
+                    from: "subscriptions",
+                    let: { ownerId: "$owner", userId: new mongoose.Types.ObjectId(req.user._id) },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$channel", "$$ownerId"] },
+                                        { $eq: ["$subscriber", "$$userId"] }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    as: "userSubscription"
+                }
+            }
+        );
+    } else {
+        // If no user is logged in, add empty userSubscription array
+        pipeline.push(
+            {
+                $addFields: {
+                    userSubscription: []
+                }
+            }
+        );
+    }
+
+    // Add lookup for total subscribers count
+    pipeline.push(
+        {
+            $lookup: {
+                from: "subscriptions",
+                localField: "owner",
+                foreignField: "channel",
+                as: "totalSubscribers"
+            }
+        }
+    );
+
+    // Add lookup for comments count
+    pipeline.push(
+        {
+            $lookup: {
+                from: "comments",
+                localField: "_id",
+                foreignField: "video",
+                as: "videoComments"
+            }
+        }
+    );
+
+    // Shape the owner field with subscription info
+    pipeline.push(
+        {
+            $addFields: {
+                owner: {
+                    $mergeObjects: [
+                        { $arrayElemAt: ["$ownerDetails", 0] },
+                        {
+                            isSubscribed: {
+                                $cond: [
+                                    { $gt: [{ $size: { $ifNull: ["$userSubscription", []] } }, 0] },
+                                    true,
+                                    false
+                                ]
+                            },
+                            subscribersCount: { $size: "$totalSubscribers" }
+                        }
+                    ]
+                },
+                commentsCount: { $size: "$videoComments" }
             }
         },
-        { $addFields: { owner: { $first: "$ownerDetails" } } },
-        { $project: { ownerDetails: 0 } }
+        { $project: { ownerDetails: 0, userSubscription: 0, totalSubscribers: 0, videoComments: 0 } }
     );
 
     // 4. Set up the options for pagination (Corrected typo from 9 to 10)
@@ -73,7 +155,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
     // 5. Execute the pipeline
     const videos = await Video.aggregatePaginate(pipeline, options);
-
+    console.log("Fetched videos:", videos);
     return res
         .status(200)
         .json(new ApiResponse(200, videos, "Videos fetched successfully"));

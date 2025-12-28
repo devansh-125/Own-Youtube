@@ -19,7 +19,7 @@ const app = express();
 
 // 1. CORS should be first to handle pre-flight requests
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true
 }));
 
@@ -43,7 +43,8 @@ app.use(session({
     cookie: {
         secure: process.env.NODE_ENV === 'production', // false for HTTP, true for HTTPS
         httpOnly: true,
-
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/'
     }
 }));
 

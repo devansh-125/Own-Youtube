@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../services/api.js';
 import './Signup.css';
+import { useAuth } from '../context/AuthContext.jsx';
 
 function Signup() {
     const navigate = useNavigate();
+    const { isLoggedIn } = useAuth();
+    
+    // Redirect to home if already logged in
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/');
+        }
+    }, [isLoggedIn, navigate]);
     
     // State for all form fields
     const [formData, setFormData] = useState({

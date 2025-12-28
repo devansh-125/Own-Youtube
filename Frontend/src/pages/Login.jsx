@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../services/api.js';
 import './Login.css';
@@ -6,11 +6,18 @@ import { useAuth } from '../context/AuthContext.jsx';
 
 function Login() {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, isLoggedIn } = useAuth();
 
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+
+    // Redirect to home if already logged in
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/');
+        }
+    }, [isLoggedIn, navigate]);
 
 
 
