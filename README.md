@@ -1,6 +1,6 @@
 # 🎬 YouTube Clone with Semantic Search
 
-A full-featured YouTube clone I built with modern web technologies, featuring **semantic search** powered by local AI embeddings. No external API calls required - everything runs locally!
+A full-featured YouTube clone I built with modern web technologies, featuring **semantic search** powered by local AI embeddings. No external API## 🎯 Key Features Explainedverything runs locally!
 
 ## ✨ Features
 
