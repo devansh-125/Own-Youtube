@@ -65,6 +65,19 @@ function Shorts() {
     // Handle keyboard arrow keys
     useEffect(() => {
         const handleKeyDown = (e) => {
+            // Check if user is typing in the comment input
+            const isCommentInputFocused = 
+                document.activeElement?.className?.includes('comment-input') ||
+                document.activeElement?.tagName === 'TEXTAREA' ||
+                document.activeElement?.tagName === 'INPUT' && 
+                document.activeElement?.getAttribute('type') !== 'checkbox' &&
+                document.activeElement?.getAttribute('type') !== 'radio';
+
+            // If typing in comment input, allow normal key behavior
+            if (isCommentInputFocused) {
+                return;
+            }
+
             if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 if (currentIndex > 0) {
