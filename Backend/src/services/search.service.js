@@ -71,8 +71,48 @@ function cosineSimilarity(vec1, vec2) {
 }
 
 /**
+ * Calculate Levenshtein distance (edit distance) for fuzzy matching
+ * Helps match typos like "dnace" -> "dance"
+ */
+function levenshteinDistance(str1, str2) {
+  const len1 = str1.length;
+  const len2 = str2.length;
+  const matrix = Array(len2 + 1)
+    .fill(null)
+    .map(() => Array(len1 + 1).fill(0));
+
+  for (let i = 0; i <= len1; i++) matrix[0][i] = i;
+  for (let j = 0; j <= len2; j++) matrix[j][0] = j;
+
+  for (let j = 1; j <= len2; j++) {
+    for (let i = 1; i <= len1; i++) {
+      const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+      matrix[j][i] = Math.min(
+        matrix[j][i - 1] + 1,
+        matrix[j - 1][i] + 1,
+        matrix[j - 1][i - 1] + indicator
+      );
+    }
+  }
+
+  return matrix[len2][len1];
+}
+
+/**
+ * Calculate similarity score based on Levenshtein distance
+ * Returns 0-1 score where 1 is perfect match
+ */
+function fuzzyMatchScore(str1, str2) {
+  const maxLen = Math.max(str1.length, str2.length);
+  if (maxLen === 0) return 1;
+  const distance = levenshteinDistance(str1, str2);
+  return Math.max(0, 1 - distance / maxLen);
+}
+
+/**
  * Semantic search using pre-computed embeddings stored in database
  * Uses local Xenova embeddings - no API key required!
+ * Includes fuzzy matching for typo tolerance
  * @param {string} query - Search query
  * @param {topK} topK - Number of top results to return
  * @returns {Promise<Array>} - Top K matching videos
@@ -112,42 +152,71 @@ async function semanticSearch(query, topK = 10) {
         const titleLower = video.title.toLowerCase();
         const descLower = video.discription.toLowerCase();
         const queryWords = queryLower.split(' ').filter(word => word.length > 0);
+        const titleWords = titleLower.split(/\s+/);
+        const descWords = descLower.split(/\s+/);
 
         // Exact title match gets highest boost
         if (titleLower.includes(queryLower)) {
           keywordBoost += 1.0;
         }
-        // Partial title matches for each word
+        // Partial title matches with fuzzy matching for typos
         else {
           let titleWordMatches = 0;
-          queryWords.forEach(word => {
+          queryWords.forEach(queryWord => {
             // Exact word match
-            if (titleLower.includes(word)) {
+            if (titleLower.includes(queryWord)) {
               titleWordMatches += 0.3;
             }
+            // Fuzzy match for typos (e.g., "dnace" -> "dance")
+            else {
+              let bestFuzzyScore = 0;
+              titleWords.forEach(titleWord => {
+                const score = fuzzyMatchScore(queryWord, titleWord);
+                // If fuzzy match is > 70% similar, count it as a match
+                if (score > 0.7) {
+                  bestFuzzyScore = Math.max(bestFuzzyScore, score);
+                }
+              });
+              if (bestFuzzyScore > 0) {
+                titleWordMatches += bestFuzzyScore * 0.25; // Fuzzy match boost
+              }
+            }
             // Similar word matches (handle common variations)
-            else if (word === 'bahi' && titleLower.includes('bhai')) {
+            if (queryWord === 'bahi' && titleLower.includes('bhai')) {
               titleWordMatches += 0.25; // bahi -> bhai
             }
-            else if (word === 'bhai' && titleLower.includes('bahi')) {
+            if (queryWord === 'bhai' && titleLower.includes('bahi')) {
               titleWordMatches += 0.25; // bhai -> bahi
             }
-            else if (word === 'life' && (titleLower.includes('life') || titleLower.includes('college'))) {
+            if (queryWord === 'life' && (titleLower.includes('life') || titleLower.includes('college'))) {
               titleWordMatches += 0.2; // life related content
             }
           });
-          keywordBoost += titleWordMatches;
+          keywordBoost += Math.min(titleWordMatches, 0.7); // Cap boost at 0.7 for non-exact matches
         }
 
-        // Description matches get lower boost
+        // Description matches with fuzzy matching
         if (descLower.includes(queryLower)) {
           keywordBoost += 0.3;
         }
         else {
           let descWordMatches = 0;
-          queryWords.forEach(word => {
-            if (descLower.includes(word)) {
+          queryWords.forEach(queryWord => {
+            if (descLower.includes(queryWord)) {
               descWordMatches += 0.1;
+            }
+            // Fuzzy match in description
+            else {
+              let bestFuzzyScore = 0;
+              descWords.forEach(descWord => {
+                const score = fuzzyMatchScore(queryWord, descWord);
+                if (score > 0.75) {
+                  bestFuzzyScore = Math.max(bestFuzzyScore, score);
+                }
+              });
+              if (bestFuzzyScore > 0) {
+                descWordMatches += bestFuzzyScore * 0.05; // Lower boost for description
+              }
             }
           });
           keywordBoost += descWordMatches;

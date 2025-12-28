@@ -1,0 +1,327 @@
+/* Search Wrapper Container - Main container */
+.search-wrapper-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 24px;
+}
+
+/* Search Container - Flex layout with search bar and mic */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.search-wrapper-form {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #424242;
+  border-radius: 24px;
+  background-color: #212121;
+  padding: 8px 16px;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  gap: 8px;
+}
+
+.search-wrapper.focused {
+  background-color: #1a1a1a;
+  border-color: #666;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.search-wrapper.listening {
+  border-color: #ff0000;
+  background-color: #1a1a1a;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.3);
+}
+
+/* Search Icon (Left) */
+.search-icon-left {
+  width: 20px;
+  height: 20px;
+  stroke: #999;
+  flex-shrink: 0;
+  transition: stroke 0.2s ease-in-out;
+}
+
+.search-wrapper.focused .search-icon-left {
+  stroke: #fff;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  padding: 6px 0;
+  font-size: 16px;
+  color: #fff;
+  outline: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Listening Text */
+.listening-text {
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
+  white-space: nowrap;
+  animation: blink 1.4s infinite;
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0.5;
+  }
+}
+
+/* Clear Button */
+.clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: #666;
+  font-size: 18px;
+  padding: 0;
+  transition: all 0.2s ease-in-out;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.clear-btn:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.clear-btn:active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Search Button (Right) */
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+  padding: 0;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.search-btn:hover:not(:disabled) {
+  background-color: #333;
+  color: #fff;
+}
+
+.search-btn:active:not(:disabled) {
+  background-color: #444;
+}
+
+.search-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.search-icon-right {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+/* Loading Spinner */
+.search-spinner {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #444;
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Voice Search Button (Microphone) */
+.voice-search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #424242;
+  background-color: #212121;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+  padding: 0;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.voice-search-btn:hover:not(:disabled) {
+  background-color: #333;
+  border-color: #666;
+  color: #fff;
+}
+
+.voice-search-btn:active:not(:disabled) {
+  background-color: #444;
+}
+
+.voice-search-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Listening state */
+.voice-search-btn.listening {
+  background-color: #ff0000;
+  border-color: #ff0000;
+  color: #fff;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+  }
+}
+
+.mic-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .search-wrapper-container {
+    padding: 0 16px;
+  }
+
+  .search-container {
+    max-width: 600px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-wrapper-container {
+    padding: 0 12px;
+  }
+
+  .search-container {
+    max-width: 100%;
+    gap: 10px;
+  }
+
+  .search-wrapper {
+    padding: 6px 12px;
+    gap: 6px;
+  }
+
+  .search-input {
+    font-size: 14px;
+    padding: 4px 0;
+  }
+
+  .search-icon-left,
+  .search-icon-right {
+    width: 18px;
+    height: 18px;
+  }
+
+  .search-btn,
+  .voice-search-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mic-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-wrapper-container {
+    padding: 0 8px;
+  }
+
+  .search-wrapper {
+    border-radius: 20px;
+    padding: 4px 10px;
+  }
+
+  .search-input {
+    font-size: 13px;
+  }
+
+  .search-btn,
+  .voice-search-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .search-icon-left,
+  .search-icon-right,
+  .mic-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
