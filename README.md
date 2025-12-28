@@ -330,8 +330,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 📞 Contact
 
 - **GitHub:** [devansh-125](https://github.com/devansh-125)
-- **LinkedIn:** [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- **Email:** your.email@example.com
+- **LinkedIn:** [Devansh Chaudhary](https://www.linkedin.com/in/devansh-chaudhary-26ba73311/)
+- **Email:** cdevansh913@gmail.com
 
 ---
 
