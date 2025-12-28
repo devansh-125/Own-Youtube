@@ -28,6 +28,13 @@
     height: 100%;
 }
 
+/* Shorts player in video detail - use portrait aspect ratio */
+.video-player-wrapper.shorts-player {
+    aspect-ratio: 9 / 16;
+    max-width: 300px;
+    margin: 0 auto 12px auto;
+}
+
 .video-title-detail {
     font-size: 1.25rem;
     font-weight: 700;

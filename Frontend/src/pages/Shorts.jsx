@@ -62,6 +62,22 @@ function Shorts() {
         fetchShorts();
     }, [shortId]);
 
+    // Add current short to watch history
+    useEffect(() => {
+        if (authUser && shorts.length > 0 && currentIndex >= 0 && currentIndex < shorts.length) {
+            const currentShort = shorts[currentIndex];
+            const addToHistory = async () => {
+                try {
+                    await API.post(`/users/history/${currentShort._id}`);
+                    console.log(`Added short "${currentShort.title}" to watch history`);
+                } catch (error) {
+                    console.error("Error adding to history:", error);
+                }
+            };
+            addToHistory();
+        }
+    }, [currentIndex, shorts, authUser]);
+
     // Handle play/pause
     const handlePlayPause = useCallback(() => {
         if (videoRef.current) {

@@ -94,7 +94,7 @@ function VideoDetail() {
     <>
     <div className='video-detail-page'>
       <div className='primary-column'>
-        <div className='video-player-wrapper'>
+        <div className={`video-player-wrapper ${video.isShort ? 'shorts-player' : ''}`}>
           <video className='video-player' src={video.videoFile} controls autoPlay />
         </div>
 

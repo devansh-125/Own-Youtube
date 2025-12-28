@@ -12,11 +12,35 @@
     padding-bottom: 1rem;
 }
 
+.history-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+    color: var(--text-color);
+}
+
 /* Reusing the video grid style from other pages */
 .video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Shorts horizontal scroll */
+.shorts-horizontal-scroll {
+    display: flex;
+    gap: 1.2rem;
+    overflow-x: auto;
+    padding: 0.5rem 0 2rem 0;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-bottom: 2rem;
+}
+
+.shorts-horizontal-scroll::-webkit-scrollbar {
+    display: none;
 }
 
 /* Reusing status and empty state styles */
