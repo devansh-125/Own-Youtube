@@ -19,7 +19,7 @@ const app = express();
 
 // 1. CORS should be first to handle pre-flight requests
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176"],
     credentials: true
 }));
 

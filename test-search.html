@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Test</title>
+</head>
+<body>
+    <h1>Search Test</h1>
+    <input type="text" id="searchInput" placeholder="Type 'birthday' and click search">
+    <button onclick="performSearch()">Search</button>
+    <div id="results"></div>
+
+    <script>
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value;
+            const resultsDiv = document.getElementById('results');
+
+            if (!query.trim()) {
+                resultsDiv.innerHTML = '<p>Please enter a search query</p>';
+                return;
+            }
+
+            resultsDiv.innerHTML = '<p>Searching...</p>';
+
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/search/hybrid', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        query: query.trim(),
+                        limit: 20,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const results = data.data.results;
+                    resultsDiv.innerHTML = `
+                        <h2>Found ${results.length} results for "${query}"</h2>
+                        <ul>
+                            ${results.map(video => `<li>${video.title} - ${video.discription}</li>`).join('')}
+                        </ul>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = '<p>Search failed: ' + (data.message || 'Unknown error') + '</p>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = '<p>Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

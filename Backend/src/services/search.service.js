@@ -1,28 +1,45 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Video } from "../models/video.model.js";
 import { ApiError } from "../utils/ApiError.js";
+import { pipeline } from "@xenova/transformers";
 
-// Initialize Gemini API
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize Xenova embedding pipeline (runs locally, no API key needed!)
+// Model: all-MiniLM-L6-v2 - produces 384-dimensional embeddings
+let embeddingPipeline = null;
 
 /**
- * Generate embedding for text using Gemini
+ * Initialize the embedding pipeline (lazy load on first use)
+ */
+async function initEmbeddingPipeline() {
+  if (!embeddingPipeline) {
+    console.log("🚀 Initializing Xenova embedding pipeline...");
+    embeddingPipeline = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+    console.log("✅ Xenova embedding pipeline initialized");
+  }
+  return embeddingPipeline;
+}
+
+/**
+ * Generate embedding for text using Xenova (local, no API key needed!)
  * @param {string} text - Text to embed
- * @returns {Promise<Array>} - Embedding vector
+ * @returns {Promise<Array>} - Embedding vector (384 dimensions)
  */
 async function generateEmbedding(text) {
   try {
-    const model = genAI.getGenerativeModel({ model: "embedding-001" });
-
-    const result = await model.embedContent({
-      content: { parts: [{ text: text }] }
+    const pipe = await initEmbeddingPipeline();
+    
+    // Get embedding from Xenova
+    const result = await pipe(text, {
+      pooling: 'mean',
+      normalize: true,
     });
-    const embedding = result.embedding.values;
 
+    // Convert to array and return
+    const embedding = Array.from(result.data);
+    
     return embedding;
   } catch (error) {
-    console.error("Error generating embedding:", error);
-    throw new ApiError(500, "Failed to generate embedding");
+    console.error("Error generating embedding:", error.message);
+    throw new ApiError(500, "Failed to generate embedding: " + error.message);
   }
 }
 
@@ -55,6 +72,7 @@ function cosineSimilarity(vec1, vec2) {
 
 /**
  * Semantic search using pre-computed embeddings stored in database
+ * Uses local Xenova embeddings - no API key required!
  * @param {string} query - Search query
  * @param {topK} topK - Number of top results to return
  * @returns {Promise<Array>} - Top K matching videos
@@ -76,7 +94,7 @@ async function semanticSearch(query, topK = 10) {
       return [];
     }
 
-    // Generate embedding for the search query
+    // Generate embedding for the search query using Xenova
     const queryEmbedding = await generateEmbedding(query);
 
     // Calculate similarity with pre-stored embeddings (fast!)
@@ -112,7 +130,7 @@ async function keywordSearch(query, limit = 10) {
       isPublished: true,
     })
       .select(
-        "title discription thumbnail videoFile duration views owner createdAt"
+        "title discription thumbnail videoFile duration views owner createdAt embedding"
       )
       .populate("owner", "username avatar")
       .limit(limit)
@@ -127,7 +145,7 @@ async function keywordSearch(query, limit = 10) {
 
 /**
  * Hybrid search combining semantic and keyword search
- * Uses pre-computed embeddings stored in database
+ * Uses Xenova local embeddings - no API key required!
  * @param {string} query - Search query
  * @param {number} topK - Number of results to return
  * @returns {Promise<Array>} - Combined search results
@@ -141,25 +159,31 @@ async function hybridSearch(query, topK = 10) {
       return [];
     }
 
-    // Generate embedding for the search query
+    // Generate embedding for the search query using Xenova
     const queryEmbedding = await generateEmbedding(query);
 
-    // For each keyword result, calculate similarity with pre-stored embeddings
-    const rankedResults = keywordResults
-      .filter(video => video.embedding && video.embedding.length > 0) // Only videos with embeddings
-      .map(video => {
-        const similarityScore = cosineSimilarity(queryEmbedding, video.embedding);
-        return {
-          ...video,
-          similarityScore,
-        };
-      })
+    // Separate videos with and without embeddings
+    const videosWithEmbeddings = keywordResults.filter(
+      video => video.embedding && video.embedding.length > 0
+    );
+    const videosWithoutEmbeddings = keywordResults.filter(
+      video => !video.embedding || video.embedding.length === 0
+    );
+
+    // Rank videos with embeddings by semantic similarity
+    const semanticRanked = videosWithEmbeddings
+      .map(video => ({
+        ...video,
+        similarityScore: cosineSimilarity(queryEmbedding, video.embedding),
+      }))
       .sort((a, b) => b.similarityScore - a.similarityScore)
-      .slice(0, topK)
-      .map(({ similarityScore, ...video }) => {
-        // Remove similarity score before returning
-        return video;
-      });
+      .map(({ embedding, similarityScore, ...video }) => video); // Remove embedding field
+
+    // Combine: semantic ranked results + keyword-only results
+    const rankedResults = [
+      ...semanticRanked,
+      ...videosWithoutEmbeddings.map(({ embedding, ...video }) => video)
+    ].slice(0, topK);
 
     return rankedResults;
   } catch (error) {

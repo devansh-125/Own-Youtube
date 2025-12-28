@@ -5,6 +5,7 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext.jsx' 
 import { ThemeProvider } from './context/ThemeContext.jsx'
+import { SearchProvider } from './context/SearchContext.jsx'
 
 // Import your page components
 import Home from './pages/Home.jsx';
@@ -46,7 +47,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThemeProvider>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <SearchProvider>
+        <RouterProvider router={router} />
+      </SearchProvider>
     </AuthProvider>
   </ThemeProvider>
 )

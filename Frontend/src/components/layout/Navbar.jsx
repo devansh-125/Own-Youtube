@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useTheme } from '../../context/ThemeContext.jsx';
 import useOnClickOutside from '../../hooks/useOnClickOutside.js';
+import SearchBar from '../common/SearchBar.jsx';
 import './Navbar.css';
 
 function Navbar() {
@@ -102,16 +103,7 @@ function Navbar() {
         </div>
 
         <div className='search-container'>
-            <input
-              type="text"
-              placeholder="Search"
-              className='search-input'
-            />
-            <button className='search-btn'>
-              <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style={{width: '24px', height: '24px', fill: 'var(--text-color)'}}>
-                <g><path d="M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z"></path></g>
-              </svg>
-            </button>
+            <SearchBar />
         </div>
 
         <ul className='nav-links'>
