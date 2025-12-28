@@ -49,8 +49,8 @@
 .channel-item {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
     background-color: var(--card-bg);
     border-radius: 8px;
     cursor: pointer;
@@ -63,8 +63,8 @@
 }
 
 .channel-avatar {
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
@@ -76,36 +76,36 @@
 }
 
 .channel-name {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    margin: 0 0 0.25rem 0;
+    margin: 0 0 0.1rem 0;
     color: var(--text-color);
 }
 
 .channel-username {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
-    margin: 0 0 0.5rem 0;
+    margin: 0;
 }
 
 .channel-description {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.3;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
 .subscribe-btn {
-    padding: 0.5rem 1.5rem;
+    padding: 0.35rem 1rem;
     border: none;
     border-radius: 20px;
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
