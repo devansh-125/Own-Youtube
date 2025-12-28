@@ -3,10 +3,12 @@ import API from '../services/api.js';
 import './Shorts.css';
 import { Loader } from '../components/common/Loader.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useParams } from 'react-router-dom';
 import EmojiInput from '../components/common/EmojiInput.jsx';
 
 function Shorts() {
     const { authUser } = useAuth();
+    const { shortId } = useParams();
     const [shorts, setShorts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,6 +41,15 @@ function Shorts() {
                     console.log("isSubscribed value:", shortsData[0].owner?.isSubscribed);
                 }
                 setShorts(shortsData);
+                
+                // If shortId is provided, find and set the index to that short
+                if (shortId && shortsData.length > 0) {
+                    const shortIndex = shortsData.findIndex(short => short._id === shortId);
+                    if (shortIndex !== -1) {
+                        setCurrentIndex(shortIndex);
+                    }
+                }
+                
                 setLiked(false);
                 setDisliked(false);
                 setIsPlaying(true);
@@ -49,7 +60,7 @@ function Shorts() {
             }
         };
         fetchShorts();
-    }, []);
+    }, [shortId]);
 
     // Handle play/pause
     const handlePlayPause = useCallback(() => {

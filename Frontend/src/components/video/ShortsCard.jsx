@@ -28,7 +28,7 @@ function ShortsCard({ short }) {
     };
 
     return (
-        <Link to={`/shorts`} className="shorts-card" title={title}>
+        <Link to={`/shorts/${short._id}`} className="shorts-card" title={title}>
             <img 
                 src={getThumbnail()} 
                 alt={title}

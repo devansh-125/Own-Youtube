@@ -37,6 +37,7 @@ const router = createBrowserRouter([
       { path : 'edit-video/:videoId', element: <EditVideo /> },
       { path: 'liked-videos', element: <LikedVideos /> },
       { path: 'shorts', element: <Shorts /> },
+      { path: 'shorts/:shortId', element: <Shorts /> },
       { path: 'search-results', element: <SearchResults /> },
      
     ]
