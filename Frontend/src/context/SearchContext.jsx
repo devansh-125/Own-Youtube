@@ -17,7 +17,13 @@ export const SearchProvider = ({ children }) => {
   const [isSearching, setIsSearching] = useState(false);
 
   const performSearch = async (query) => {
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      // Clear search results when query is empty
+      setSearchResults([]);
+      setSearchQuery('');
+      setSearchType('');
+      return;
+    }
 
     try {
       setIsSearching(true);

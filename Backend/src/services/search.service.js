@@ -79,10 +79,9 @@ function cosineSimilarity(vec1, vec2) {
  */
 async function semanticSearch(query, topK = 10) {
   try {
-    // Get all published videos with embeddings
-    const videos = await Video.find({
+    // Get ALL published videos (with and without embeddings)
+    const allVideos = await Video.find({
       isPublished: true,
-      embedding: { $exists: true, $ne: null } // Only videos with embeddings
     })
       .select(
         "title discription thumbnail videoFile duration views owner createdAt embedding"
@@ -90,22 +89,83 @@ async function semanticSearch(query, topK = 10) {
       .populate("owner", "username avatar")
       .lean();
 
-    if (videos.length === 0) {
+    if (allVideos.length === 0) {
       return [];
     }
 
     // Generate embedding for the search query using Xenova
     const queryEmbedding = await generateEmbedding(query);
 
-    // Calculate similarity with pre-stored embeddings (fast!)
-    const videosWithScores = videos
-      .map(video => ({
-        ...video,
-        similarityScore: cosineSimilarity(queryEmbedding, video.embedding),
-      }))
-      .sort((a, b) => b.similarityScore - a.similarityScore)
+    // Calculate similarity for all videos
+    const videosWithScores = allVideos
+      .map(video => {
+        let similarityScore = 0;
+        let keywordBoost = 0;
+
+        // If video has embedding, calculate semantic similarity
+        if (video.embedding && video.embedding.length > 0) {
+          similarityScore = cosineSimilarity(queryEmbedding, video.embedding);
+        }
+
+        // Add keyword matching boost (higher priority for exact and similar matches)
+        const queryLower = query.toLowerCase();
+        const titleLower = video.title.toLowerCase();
+        const descLower = video.discription.toLowerCase();
+        const queryWords = queryLower.split(' ').filter(word => word.length > 0);
+
+        // Exact title match gets highest boost
+        if (titleLower.includes(queryLower)) {
+          keywordBoost += 1.0;
+        }
+        // Partial title matches for each word
+        else {
+          let titleWordMatches = 0;
+          queryWords.forEach(word => {
+            // Exact word match
+            if (titleLower.includes(word)) {
+              titleWordMatches += 0.3;
+            }
+            // Similar word matches (handle common variations)
+            else if (word === 'bahi' && titleLower.includes('bhai')) {
+              titleWordMatches += 0.25; // bahi -> bhai
+            }
+            else if (word === 'bhai' && titleLower.includes('bahi')) {
+              titleWordMatches += 0.25; // bhai -> bahi
+            }
+            else if (word === 'life' && (titleLower.includes('life') || titleLower.includes('college'))) {
+              titleWordMatches += 0.2; // life related content
+            }
+          });
+          keywordBoost += titleWordMatches;
+        }
+
+        // Description matches get lower boost
+        if (descLower.includes(queryLower)) {
+          keywordBoost += 0.3;
+        }
+        else {
+          let descWordMatches = 0;
+          queryWords.forEach(word => {
+            if (descLower.includes(word)) {
+              descWordMatches += 0.1;
+            }
+          });
+          keywordBoost += descWordMatches;
+        }
+
+        // Combine semantic similarity with keyword boost
+        const finalScore = similarityScore + keywordBoost;
+
+        return {
+          ...video,
+          similarityScore: finalScore,
+          semanticScore: similarityScore,
+          keywordBoost: keywordBoost,
+        };
+      })
+      .sort((a, b) => b.similarityScore - a.similarityScore) // Sort by final score (highest first)
       .slice(0, topK)
-      .map(({ embedding, similarityScore, ...video }) => video); // Remove embedding & score before returning
+      .map(({ embedding, similarityScore, semanticScore, keywordBoost, ...video }) => video); // Remove internal scores
 
     return videosWithScores;
   } catch (error) {
@@ -146,49 +206,25 @@ async function keywordSearch(query, limit = 10) {
 /**
  * Hybrid search combining semantic and keyword search
  * Uses Xenova local embeddings - no API key required!
+ * Returns ALL videos ranked by semantic similarity to query
  * @param {string} query - Search query
- * @param {number} topK - Number of results to return
- * @returns {Promise<Array>} - Combined search results
+ * @param {number} topK - Number of results to return (optional, for performance)
+ * @returns {Promise<Array>} - All videos ranked by similarity
  */
-async function hybridSearch(query, topK = 10) {
+async function hybridSearch(query, topK = 50) {
   try {
-    // Get keyword search results first (fast pre-filtering)
-    const keywordResults = await keywordSearch(query, topK * 3);
-
-    if (keywordResults.length === 0) {
-      return [];
-    }
-
-    // Generate embedding for the search query using Xenova
-    const queryEmbedding = await generateEmbedding(query);
-
-    // Separate videos with and without embeddings
-    const videosWithEmbeddings = keywordResults.filter(
-      video => video.embedding && video.embedding.length > 0
-    );
-    const videosWithoutEmbeddings = keywordResults.filter(
-      video => !video.embedding || video.embedding.length === 0
-    );
-
-    // Rank videos with embeddings by semantic similarity
-    const semanticRanked = videosWithEmbeddings
-      .map(video => ({
-        ...video,
-        similarityScore: cosineSimilarity(queryEmbedding, video.embedding),
-      }))
-      .sort((a, b) => b.similarityScore - a.similarityScore)
-      .map(({ embedding, similarityScore, ...video }) => video); // Remove embedding field
-
-    // Combine: semantic ranked results + keyword-only results
-    const rankedResults = [
-      ...semanticRanked,
-      ...videosWithoutEmbeddings.map(({ embedding, ...video }) => video)
-    ].slice(0, topK);
-
-    return rankedResults;
+    // For true semantic search like YouTube/Google, rank ALL videos by similarity
+    // This gives better results than keyword-only or hybrid approaches
+    return await semanticSearch(query, topK);
   } catch (error) {
     console.error("Error in hybrid search:", error);
-    throw error;
+    // Fallback to basic keyword search
+    try {
+      return await keywordSearch(query, topK);
+    } catch (keywordError) {
+      console.error("Keyword search also failed:", keywordError);
+      return [];
+    }
   }
 }
 
