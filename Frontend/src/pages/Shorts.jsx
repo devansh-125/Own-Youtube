@@ -3,6 +3,7 @@ import API from '../services/api.js';
 import './Shorts.css';
 import { Loader } from '../components/common/Loader.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import EmojiInput from '../components/common/EmojiInput.jsx';
 
 function Shorts() {
     const { authUser } = useAuth();
@@ -782,20 +783,22 @@ function Shorts() {
                         </div>
 
                         <div className="comments-input-area">
-                            <input
-                                type="text"
-                                placeholder="Add a comment..."
+                            <EmojiInput
                                 value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
-                                className="comment-input"
+                                onChange={(text) => setNewComment(text)}
+                                placeholder="Add a comment..."
+                                className="comment-input-emoji"
+                                onFocus={() => {}}
+                                as="input"
+                                actions={
+                                    <button 
+                                        className="send-comment-btn"
+                                        onClick={handleAddComment}
+                                    >
+                                        Send
+                                    </button>
+                                }
                             />
-                            <button 
-                                className="send-comment-btn"
-                                onClick={handleAddComment}
-                            >
-                                Send
-                            </button>
                         </div>
                     </>
                 )}

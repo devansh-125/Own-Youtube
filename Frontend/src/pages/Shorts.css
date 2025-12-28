@@ -233,7 +233,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     flex-wrap: nowrap;
 }
 
@@ -580,8 +580,11 @@
     display: flex;
     gap: 8px;
     padding: 12px 16px;
-    border-top: 1px solid var(--border-color);
-    background: var(--bg-color);
+    border-top: 1px solid #3a3a3a;
+    background: #212121;
+    overflow: visible !important;
+    position: relative;
+    z-index: 50;
 }
 
 .comment-input {
@@ -695,6 +698,74 @@
 
 .delete-modal-btn.delete:hover {
     background: #c62828;
+}
+
+/* Custom styles for emoji input in comments */
+.comment-input-emoji {
+    width: 100%;
+}
+
+.comment-input-emoji .emoji-input-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.comment-input-emoji .text-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #3a3a3a;
+    border-radius: 16px;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 0.85rem;
+    transition: border-color 0.2s;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.comment-input-emoji .text-input:focus {
+    border: 1px solid #ff0000;
+    border-bottom: 1px solid #ff0000;
+    background: #262626;
+}
+
+.comment-input-emoji .text-input::placeholder {
+    color: #666;
+}
+
+.comment-input-emoji .emoji-controls {
+    margin-top: 0;
+    display: flex;
+    gap: 0;
+}
+
+.comment-input-emoji .emoji-toggle-btn {
+    color: #aaa;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+}
+
+.comment-input-emoji .emoji-toggle-btn:hover {
+    color: #fff;
+}
+
+.comment-input-emoji .send-comment-btn {
+    padding: 8px 16px;
+    background: #065fd4;
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.comment-input-emoji .send-comment-btn:hover {
+    background: #0544b4;
 }
 
 /* Desktop: Ensure proper sizing */
