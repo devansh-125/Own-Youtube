@@ -180,7 +180,29 @@ npm start
 | "birthday" | Birthday videos ranked by relevance | Exact keyword + semantic similarity |
 | "birrthhday" | Same birthday videos (typo tolerant) | Semantic search ignores spelling |
 
-## 🎯 Key Features Explained
+## � Screenshots
+
+### Home Page
+![Home Page - Featured Videos and Shorts](./docs/screenshots/01-home-page.png)
+The main feed displays featured videos in a grid layout with a horizontal shorts carousel for quick browsing.
+
+### Shorts Player
+![Shorts - Vertical Video Format](./docs/screenshots/02-shorts-player.png)
+Vertical 9:16 aspect ratio player with swipe navigation, keyboard controls, and full engagement features.
+
+### Video Detail
+![Video Detail - Full Player with Comments](./docs/screenshots/03-video-detail.png)
+Complete video player with metadata, like/dislike buttons, comments section, and recommendations.
+
+### Search Results
+![Search Results - Semantic Search in Action](./docs/screenshots/04-search-results.png)
+Semantic search displaying results ranked by meaning and relevance, with both exact and fuzzy matches.
+
+### Subscriptions
+![Subscriptions - All Followed Channels](./docs/screenshots/05-subscriptions.png)
+View all subscribed channels with subscriber counts, descriptions, and direct navigation to channel profiles.
+
+## �🎯 Key Features Explained
 
 ### 📜 Watch History
 - **Automatic Tracking:** Every video/short you watch is recorded
