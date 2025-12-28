@@ -503,6 +503,7 @@ const getUpNextVideos = asyncHandler(async (req, res) => {
                 owner: new mongoose.Types.ObjectId(channelId),
                 _id: { $ne: new mongoose.Types.ObjectId(currentVideoId) },
                 isPublished: true,
+                isShort: { $ne: true }  // Exclude shorts
             }
         },
         {
@@ -549,6 +550,7 @@ const getUpNextVideos = asyncHandler(async (req, res) => {
                 $match: {
                     _id: { $nin: excludeIds },
                     isPublished: true,
+                    isShort: { $ne: true }  // Exclude shorts
                 }
             },
             {
